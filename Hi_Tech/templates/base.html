@@ -1,0 +1,20 @@
+<!DOCTYPE HTML5>
+<html>
+<head>
+    <title>{% block title %}Hi-Tech{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+</head>
+<body>
+
+    {% include 'navbar.html' %}
+
+    {% block content %}
+    
+
+    {% endblock %}
+
+    {% include 'footer.html' %}
+
+</body>
+</html>
