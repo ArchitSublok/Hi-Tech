@@ -30,10 +30,16 @@
 
 #get_started{
     background-color:#14467B ;
-    /* width:50vw; */
+    height:3vh;
+    width:20vw;
+    border-radius: 20px;
 }
 
 #explore{
+    background-color:#14467B ;
+    height:3vh;
+    width:20vw;
+    border-radius: 20px;
 
 }
 
