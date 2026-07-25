@@ -1,1 +1,21 @@
-{% extends 'base.html' %}
+<!DOCTYPE HTML5>
+<html>
+<head>
+    <title>{% block title %}Hi-Tech{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/intro.css' %}">
+</head>
+<body>
+
+    {% include 'navbar.html' %}
+    
+  
+    {% include 'home_page/intro.html' %}
+
+
+    {% include 'footer.html' %}
+
+</body>
+</html>
