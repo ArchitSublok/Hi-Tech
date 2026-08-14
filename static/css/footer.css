@@ -1,3 +1,7 @@
-p{
-    color:red;
+.site-footer {
+    background: #0B2545;
+    color: #8DA9C4;
+    text-align: center;
+    padding: 24px;
+    font-size: 14px;
 }

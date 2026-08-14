@@ -1,21 +1,12 @@
-<!DOCTYPE HTML5>
-<html>
-<head>
-    <title>{% block title %}Hi-Tech{% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hi-Tech | AI-Native Cloud{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/intro.css' %}">
-</head>
-<body>
+{% endblock %}
 
-    {% include 'navbar.html' %}
-    
-  
+{% block content %}
     {% include 'home_page/intro.html' %}
-
-
-    {% include 'footer.html' %}
-
-</body>
-</html>
+{% endblock %}
