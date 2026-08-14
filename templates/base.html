@@ -1,20 +1,22 @@
-{% comment %} <!DOCTYPE HTML5>
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Hi-Tech{% endblock %}</title>
-    {% load static %}
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
 
     {% include 'navbar.html' %}
 
     {% block content %}
-    
-
     {% endblock %}
 
     {% include 'footer.html' %}
 
 </body>
-</html> {% endcomment %}
+</html>
