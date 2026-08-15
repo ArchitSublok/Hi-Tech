@@ -1,25 +1,32 @@
-.main{
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    border: 2px solid black;
-} 
+.collection { padding: var(--space-7) 0 var(--space-9); }
 
-.grid{
-    display: grid;
-    grid-template-rows: auto auto auto auto;
-    grid-template-columns: auto auto auto auto;
-    gap:20px;
+.collection-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+    gap: var(--space-3);
 }
 
-.items{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
+.collection-header h1 { font-size: 28px; margin: 0 0 4px; }
+.collection-count { color: var(--color-text-muted); font-size: 14px; margin: 0; }
+.sort-select { padding: 8px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 14px; background: #fff; }
 
-img{
-    width:10vw;
+.collection-body { display: grid; grid-template-columns: 200px 1fr; gap: var(--space-6); }
+.collection-filters h3 { font-size: 14px; margin: 0 0 var(--space-3); }
+.filter-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.filter-list a { color: var(--color-text-muted); text-decoration: none; font-size: 14px; padding: 6px 8px; border-radius: var(--radius-sm); display: block; transition: background var(--duration-fast) var(--ease-standard); }
+.filter-list a:hover { background: var(--color-bg); color: var(--color-text); }
+.filter-list a.active { background: var(--color-primary); color: #fff; }
+
+.pagination { display: flex; justify-content: center; align-items: center; gap: var(--space-4); margin-top: var(--space-7); }
+.pagination a { color: var(--color-primary); text-decoration: none; font-weight: 600; font-size: 14px; padding: 8px 14px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+.pagination a:hover { border-color: var(--color-primary); }
+.pagination span { color: var(--color-text-muted); font-size: 14px; }
+
+@media (max-width: 768px) {
+    .collection-body { grid-template-columns: 1fr; }
+    .collection-filters { display: flex; overflow-x: auto; }
+    .filter-list { flex-direction: row; }
 }
