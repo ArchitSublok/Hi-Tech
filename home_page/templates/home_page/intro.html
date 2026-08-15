@@ -1,45 +1,38 @@
 <section class="hero">
-    <div class="hero-content">
-        <h1>AI-Native Cloud</h1>
-        <p class="hero-subtext">One integrated platform, silicon to agent, with economics that improve as you scale.</p>
-
-        <div class="hero-buttons">
-            <a href="#" class="btn-primary">Get started</a>
-            <a href="#" class="btn-secondary">Explore products</a>
-        </div>
-
-        <p class="hero-tagline">From real-time workloads to trillion-token scale, businesses trust Hi-Tech.</p>
-
-        <div class="logo-strip">
-            <span>NimbusData</span>
-            <span>Vertex Labs</span>
-            <span>Orbit AI</span>
-            <span>CoreStack</span>
+    <div class="hero-inner container">
+        <div class="hero-copy">
+            <p class="eyebrow">Hi-Tech Electronics</p>
+            <h1>Technology that just works</h1>
+            <p class="hero-subtext">Browse a curated range of laptops, accessories, and smart devices — picked for quality, priced fairly.</p>
+            <div class="hero-actions">
+                <a href="{% url 'products' %}" class="btn btn-primary">Shop products</a>
+                <a href="#" class="btn btn-secondary">Learn more</a>
+            </div>
         </div>
     </div>
 </section>
 
-<section class="stats-section">
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h2>67%</h2>
-            <h3>lower cost</h3>
-            <p>Clients run large-scale automation on Hi-Tech's infrastructure at 67% lower cost, with higher throughput on the same workload.</p>
-            <span class="stat-company">NimbusData</span>
-        </div>
+<section class="value-props">
+    <div class="container value-grid">
+        <div class="value-item"><h3>Free shipping</h3><p>On orders over ₹2,000</p></div>
+        <div class="value-item"><h3>Secure payment</h3><p>Encrypted checkout</p></div>
+        <div class="value-item"><h3>Easy returns</h3><p>30-day return window</p></div>
+        <div class="value-item"><h3>Support</h3><p>We're here to help</p></div>
+    </div>
+</section>
 
-        <div class="stat-card">
-            <h2>2x</h2>
-            <h3>inference throughput</h3>
-            <p>Vertex Labs handles millions of queries per day with 2× production throughput on Hi-Tech's optimized infrastructure.</p>
-            <span class="stat-company">Vertex Labs</span>
+<section class="featured-products">
+    <div class="container">
+        <div class="section-header">
+            <h2>Featured products</h2>
+            <a href="{% url 'products' %}" class="section-link">View all →</a>
         </div>
-
-        <div class="stat-card">
-            <h2>40%</h2>
-            <h3>reduction in latency</h3>
-            <p>Orbit AI runs real-time agents on Hi-Tech, powering millions of interactions with 40% lower latency.</p>
-            <span class="stat-company">Orbit AI</span>
+        <div class="product-grid">
+            {% for product in featured_products %}
+                {% include 'components/product_card.html' with product=product %}
+            {% empty %}
+                <p class="empty-state">No products added yet. Add some from the Django admin.</p>
+            {% endfor %}
         </div>
     </div>
 </section>

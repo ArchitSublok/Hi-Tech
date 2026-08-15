@@ -1,19 +1,38 @@
-<nav class="navbar">
-    <a href="{% url 'home' %}" class="navbar-logo">
-        <span class="logo-icon">H</span> Hi-Tech
-    </a>
+<header class="navbar">
+    <div class="navbar-inner container">
+        <a href="{% url 'home' %}" class="navbar-logo">
+            <span class="logo-mark">H</span>
+            <span>Hi-Tech</span>
+        </a>
 
-    <div class="navbar-links">
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="{% url 'products' %}">Products</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-    </div>
+        <nav class="navbar-links" aria-label="Primary">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'products' %}">Products</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
 
-    <div class="navbar-actions">
-        <a href="#" class="btn-outline-sm">Log in</a>
-        <a href="#" class="btn-fill-sm">Sign up</a>
+        <div class="navbar-search">
+            <input type="text" placeholder="Search products..." aria-label="Search products">
+        </div>
+
+        <div class="navbar-actions">
+            <a href="{% url 'login' %}" class="icon-btn" aria-label="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </a>
+            <a href="#" class="icon-btn" aria-label="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-badge">0</span>
+            </a>
+        </div>
     </div>
-</nav>
+</header>

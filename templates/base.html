@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Hi-Tech{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     {% block extra_css %}{% endblock %}
@@ -19,6 +20,5 @@
     {% include 'footer.html' %}
 
     <script src="{% static 'js/navbar.js' %}"></script>
-
 </body>
 </html>
