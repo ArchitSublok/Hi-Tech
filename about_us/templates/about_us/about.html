@@ -31,32 +31,57 @@
 </section>
 
 <section class="about-process">
-    <div class="container">
+    <div class="container-wide">
         <div class="section-header">
             <h2>How we work</h2>
             <p class="section-sub">From sourcing to your doorstep</p>
         </div>
 
-        <div class="process-grid">
-            <div class="process-card">
-                <span class="process-step">01</span>
-                <h3>Sourcing</h3>
-                <p>We evaluate suppliers and products directly, prioritising reliability over trend-chasing.</p>
+        <div class="process-showcase">
+            <div class="process-list" role="tablist" aria-label="Our process steps">
+                <button type="button" class="process-step-btn is-active" data-image="https://placehold.co/900x700/134074/EEF4ED?text=Sourcing" role="tab" aria-selected="true">
+                    <span class="process-step">01</span>
+                    <span class="process-step-body">
+                        <h3>Sourcing</h3>
+                        <p>We evaluate suppliers and products directly, prioritising reliability over trend-chasing.</p>
+                    </span>
+                </button>
+
+                <button type="button" class="process-step-btn" data-image="https://placehold.co/900x700/13315C/EEF4ED?text=Quality+Check" role="tab" aria-selected="false">
+                    <span class="process-step">02</span>
+                    <span class="process-step-body">
+                        <h3>Quality check</h3>
+                        <p>Every product line is reviewed before it's listed — no drop-shipping guesswork.</p>
+                    </span>
+                </button>
+
+                <button type="button" class="process-step-btn" data-image="https://placehold.co/900x700/0B2545/EEF4ED?text=Packaging" role="tab" aria-selected="false">
+                    <span class="process-step">03</span>
+                    <span class="process-step-body">
+                        <h3>Packaging</h3>
+                        <p>Orders are packed carefully, so what you see in photos is what arrives at your door.</p>
+                    </span>
+                </button>
+
+                <button type="button" class="process-step-btn" data-image="https://placehold.co/900x700/8DA9C4/0B2545?text=Delivery" role="tab" aria-selected="false">
+                    <span class="process-step">04</span>
+                    <span class="process-step-body">
+                        <h3>Delivery</h3>
+                        <p>Fast, tracked delivery so your order arrives when we say it will.</p>
+                    </span>
+                </button>
+
+                <button type="button" class="process-step-btn" data-image="https://placehold.co/900x700/134074/EEF4ED?text=Support" role="tab" aria-selected="false">
+                    <span class="process-step">05</span>
+                    <span class="process-step-body">
+                        <h3>Support</h3>
+                        <p>A real person to talk to if something's not right — no chatbot loops.</p>
+                    </span>
+                </button>
             </div>
-            <div class="process-card">
-                <span class="process-step">02</span>
-                <h3>Quality check</h3>
-                <p>Every product line is reviewed before it's listed — no drop-shipping guesswork.</p>
-            </div>
-            <div class="process-card">
-                <span class="process-step">03</span>
-                <h3>Packaging</h3>
-                <p>Orders are packed carefully, so what you see in photos is what arrives at your door.</p>
-            </div>
-            <div class="process-card">
-                <span class="process-step">04</span>
-                <h3>Delivery & support</h3>
-                <p>Fast, tracked delivery — and a real person to talk to if something's not right.</p>
+
+            <div class="process-visual">
+                <img id="processImage" src="https://placehold.co/900x700/134074/EEF4ED?text=Sourcing" alt="Our process">
             </div>
         </div>
     </div>
