@@ -9,15 +9,10 @@
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'products' %}">Products</a></li>
-                {% comment %} <li><a href="#">About Us</a></li> {% endcomment %}
                 <li><a href="{% url 'about' %}">About Us</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
         </nav>
-
-        {% comment %} <div class="navbar-search">
-            <input type="text" placeholder="Search products..." aria-label="Search products">
-        </div> {% endcomment %}
 
         <div class="navbar-actions">
             <a href="{% url 'login' %}" class="icon-btn" aria-label="Account">
