@@ -1,34 +1,85 @@
+{% load static %}
 <footer class="site-footer">
     <div class="footer-inner container">
+
         <div class="footer-col">
-            <div class="footer-logo">Hi-Tech</div>
-            <p class="footer-desc">Quality tech products, delivered with care.</p>
-        </div>
-        <div class="footer-col">
-            <h4>Shop</h4>
+            <h4>Services</h4>
             <ul>
-                <li><a href="{% url 'products' %}">All Products</a></li>
-                <li><a href="#">Categories</a></li>
+                <li><a href="#">Web Development</a></li>
+                <li><a href="#">Cloud Hosting</a></li>
+                <li><a href="#">Cybersecurity</a></li>
+                <li><a href="#">IT Consulting</a></li>
+                <li><a href="#">Data Analytics</a></li>
+                <li><a href="#">System Integration</a></li>
             </ul>
         </div>
+
         <div class="footer-col">
-            <h4>Company</h4>
+            <h4>Important Info</h4>
             <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#">Grievance Redressal</a></li>
+                <li><a href="#">Mandatory Disclosures</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Refund Policy</a></li>
+                <li><a href="#">FAQ</a></li>
             </ul>
         </div>
+
         <div class="footer-col">
-            <h4>Support</h4>
+            <h4>Explore</h4>
             <ul>
-                <li><a href="#">Shipping & Returns</a></li>
-                <li><a href="#">Track Order</a></li>
+                <li><a href="{% url 'about' %}">About Us</a></li>
+                <li><a href="#">Our Team</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">News &amp; Blog</a></li>
+                <li><a href="#">Partner Network</a></li>
+                <li><a href="#">Contact Us</a></li>
             </ul>
         </div>
+
+        <div class="footer-col footer-brand">
+            <a href="{% url 'home' %}" class="footer-logo" aria-label="Hi-Tech home">
+                <span class="logo-mark">H</span>
+                <span>Hi-Tech</span>
+            </a>
+
+            <div class="footer-socials" aria-label="Social media links">
+                <a href="#" class="social-icon" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-icon" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="#" class="social-icon" aria-label="LinkedIn">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+            </div>
+
+            <address class="footer-address">
+                Hi-Tech Solutions Pvt. Ltd.<br>
+                4th Floor, Cyber Tower<br>
+                Sector 21, Rajpura, Punjab<br>
+                140401, India
+            </address>
+        </div>
+
     </div>
+
+    <div class="footer-disclaimer container">
+        <p>
+            Disclaimer: Product images and prices shown are for illustrative purposes and may vary
+            at checkout. Hi-Tech is not liable for delays caused by third-party logistics partners.
+        </p>
+    </div>
+
     <div class="footer-bottom">
-        <div class="container">
-            <p>&copy; 2026 Hi-Tech. All rights reserved.</p>
+        <div class="footer-bottom-inner container">
+            <p class="footer-copyright">&copy; Copyright 2026 Hi-Tech. All rights reserved.</p>
+            <ul class="footer-utility-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms</a></li>
+            </ul>
         </div>
     </div>
 </footer>
