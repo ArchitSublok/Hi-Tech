@@ -9,29 +9,86 @@
 {% endblock %}
 
 {% block content %}
+
+<section class="products-hero">
+    <div class="container">
+        <form method="get" action="{% url 'products' %}" class="search-form">
+            <input type="text" name="q" value="{{ search_query }}" placeholder="Search products by name..." aria-label="Search products">
+            <button type="submit" class="btn btn-primary">Search</button>
+            {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+            {% if selected_sort %}<input type="hidden" name="sort" value="{{ selected_sort }}">{% endif %}
+            {% if selected_price_range %}<input type="hidden" name="price_range" value="{{ selected_price_range }}">{% endif %}
+        </form>
+    </div>
+</section>
+
 <section class="collection">
     <div class="container">
         <div class="collection-header">
             <div>
                 <h1>All Products</h1>
-                <p class="collection-count">{{ products.paginator.count }} item{{ products.paginator.count|pluralize }}</p>
+                <p class="collection-count">{{ products.paginator.count }} item{{ products.paginator.count|pluralize }}{% if search_query %} for "{{ search_query }}"{% endif %}</p>
             </div>
-            <select class="sort-select" onchange="location.href=this.value">
-                <option value="?sort=newest" {% if not selected_sort %}selected{% endif %}>Newest</option>
-                <option value="?sort=price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                <option value="?sort=price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-            </select>
+
+            <div class="collection-header-actions">
+                <button type="button" class="filter-toggle-btn" id="filterToggle">Filters</button>
+                <select class="sort-select" onchange="location.href=this.value">
+                    <option value="?sort=newest{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if not selected_sort %}selected{% endif %}>Newest</option>
+                    <option value="?sort=price_asc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="?sort=price_desc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                </select>
+            </div>
         </div>
 
         <div class="collection-body">
-            <aside class="collection-filters">
-                <h3>Category</h3>
-                <ul class="filter-list">
-                    <li><a href="?" class="{% if not selected_category %}active{% endif %}">All</a></li>
-                    {% for category in categories %}
-                        <li><a href="?category={{ category.id }}" class="{% if selected_category == category.id|stringformat:'s' %}active{% endif %}">{{ category.name }}</a></li>
-                    {% endfor %}
-                </ul>
+            <aside class="collection-filters" id="collectionFilters">
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Category</h3>
+                    <ul class="filter-list">
+                        <li><a href="?{% if selected_sort %}sort={{ selected_sort }}{% endif %}" class="filter-option-link {% if not selected_category %}active{% endif %}">All</a></li>
+                        {% for category in categories %}
+                        <li><a href="?category={{ category.id }}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}" class="filter-option-link {% if selected_category == category.id|stringformat:'s' %}active{% endif %}">{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Price</h3>
+                    <form method="get" action="{% url 'products' %}" class="filter-form">
+                        {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+                        {% if selected_sort %}<input type="hidden" name="sort" value="{{ selected_sort }}">{% endif %}
+                        {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+
+                        <label class="filter-option">
+                            <input type="radio" name="price_range" value="" onchange="this.form.submit()" {% if not selected_price_range %}checked{% endif %}>
+                            Any price
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="price_range" value="under_1000" onchange="this.form.submit()" {% if selected_price_range == 'under_1000' %}checked{% endif %}>
+                            Under ₹1,000
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="price_range" value="1000_5000" onchange="this.form.submit()" {% if selected_price_range == '1000_5000' %}checked{% endif %}>
+                            ₹1,000 – ₹5,000
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="price_range" value="over_5000" onchange="this.form.submit()" {% if selected_price_range == 'over_5000' %}checked{% endif %}>
+                            Over ₹5,000
+                        </label>
+                    </form>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Brand</h3>
+                    <p class="filter-placeholder">Coming soon</p>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Rating</h3>
+                    <p class="filter-placeholder">Coming soon</p>
+                </div>
+
             </aside>
 
             <div class="collection-main">
@@ -39,7 +96,7 @@
                     {% for product in products %}
                         {% include 'components/product_card.html' with product=product %}
                     {% empty %}
-                        <p class="empty-state">No products yet. Add some from the Django admin.</p>
+                        <p class="empty-state">No products match your search or filters.</p>
                     {% endfor %}
                 </div>
 
@@ -54,4 +111,9 @@
         </div>
     </div>
 </section>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/products.js' %}"></script>
 {% endblock %}
