@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us | Hi-Tech{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="about-intro">
+    <div class="container about-intro-grid">
+        <div class="about-image">
+            <!-- Replace this src with a real photo whenever you're ready -->
+            <img src="https://placehold.co/640x480/13315C/EEF4ED?text=Hi-Tech" alt="Hi-Tech team at work">
+        </div>
+        <div class="about-text">
+            <p class="eyebrow">About Hi-Tech</p>
+            <h1>Built on careful choices, not shortcuts</h1>
+            <p>Hi-Tech started with a simple idea: buying electronics shouldn't mean guesswork. We spend time sourcing products we'd genuinely recommend, testing them before they reach our shelves, and standing behind every sale with real support — not just a return policy buried in fine print.</p>
+            <p>Our approach is straightforward. We work directly with trusted suppliers, keep our catalogue focused rather than overwhelming, and treat every customer question as worth a proper answer.</p>
+
+            <ul class="about-milestones">
+                <li><span>01</span> Careful, hands-on product sourcing</li>
+                <li><span>02</span> In-house quality checks before listing</li>
+                <li><span>03</span> Direct support from people who know the products</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="about-process">
+    <div class="container">
+        <div class="section-header">
+            <h2>How we work</h2>
+            <p class="section-sub">From sourcing to your doorstep</p>
+        </div>
+
+        <div class="process-grid">
+            <div class="process-card">
+                <span class="process-step">01</span>
+                <h3>Sourcing</h3>
+                <p>We evaluate suppliers and products directly, prioritising reliability over trend-chasing.</p>
+            </div>
+            <div class="process-card">
+                <span class="process-step">02</span>
+                <h3>Quality check</h3>
+                <p>Every product line is reviewed before it's listed — no drop-shipping guesswork.</p>
+            </div>
+            <div class="process-card">
+                <span class="process-step">03</span>
+                <h3>Packaging</h3>
+                <p>Orders are packed carefully, so what you see in photos is what arrives at your door.</p>
+            </div>
+            <div class="process-card">
+                <span class="process-step">04</span>
+                <h3>Delivery & support</h3>
+                <p>Fast, tracked delivery — and a real person to talk to if something's not right.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/about.js' %}"></script>
+{% endblock %}
