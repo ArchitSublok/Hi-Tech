@@ -5,9 +5,21 @@ from .models import Product, Category
 def products(request):
     queryset = Product.objects.select_related('category').all()
 
+    query = request.GET.get('q')
+    if query:
+        queryset = queryset.filter(name__icontains=query)
+
     category_id = request.GET.get('category')
     if category_id:
         queryset = queryset.filter(category_id=category_id)
+
+    price_range = request.GET.get('price_range')
+    if price_range == 'under_1000':
+        queryset = queryset.filter(price__lt=1000)
+    elif price_range == '1000_5000':
+        queryset = queryset.filter(price__gte=1000, price__lte=5000)
+    elif price_range == 'over_5000':
+        queryset = queryset.filter(price__gt=5000)
 
     sort = request.GET.get('sort')
     if sort == 'price_asc':
@@ -25,4 +37,6 @@ def products(request):
         'categories': Category.objects.all(),
         'selected_category': category_id,
         'selected_sort': sort,
+        'selected_price_range': price_range,
+        'search_query': query or '',
     })
