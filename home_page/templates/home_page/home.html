@@ -5,9 +5,20 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/intro.css' %}">
+    <link rel="stylesheet" href="{% static 'css/marquee.css' %}">
+    <link rel="stylesheet" href="{% static 'css/giant-blocks.css' %}">
+    <link rel="stylesheet" href="{% static 'css/five-layer.css' %}">
     <link rel="stylesheet" href="{% static 'css/product-card.css' %}">
 {% endblock %}
 
 {% block content %}
     {% include 'home_page/intro.html' %}
+    {% include 'home_page/marquee.html' %}
+    {% include 'home_page/giant_blocks.html' %}
+    {% include 'home_page/five_layer.html' %}
+    {% include 'home_page/existing_content.html' %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/five-layer.js' %}"></script>
 {% endblock %}

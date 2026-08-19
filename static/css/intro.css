@@ -1,0 +1,77 @@
+/* ===== HERO ===== */
+.hero {
+    background: var(--color-navy-dark);
+    color: #ffffff;
+    padding: var(--space-9) 0;
+}
+
+.hero-inner { display: flex; }
+.hero-copy { max-width: 560px; }
+
+.eyebrow {
+    color: var(--color-steel);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-3);
+}
+
+.hero h1 {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 var(--space-4);
+    color: #ffffff;
+}
+
+.hero-subtext {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin: 0 0 var(--space-6);
+    max-width: 480px;
+}
+
+.hero-actions { display: flex; gap: var(--space-3); }
+.hero .btn-secondary { color: #ffffff; border-color: rgba(255, 255, 255, 0.25); }
+.hero .btn-secondary:hover { border-color: #ffffff; color: #ffffff; }
+
+/* ===== VALUE PROPS ===== */
+.value-props {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-7) 0;
+}
+
+.value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-5); }
+
+.value-item {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    transition: border-color var(--duration-base) var(--ease-standard);
+}
+
+.value-item:hover { border-color: var(--color-primary); }
+.value-item h3 { font-size: 15px; margin: 0 0 4px; }
+.value-item p { font-size: 13px; color: var(--color-text-muted); margin: 0; }
+
+/* ===== FEATURED PRODUCTS ===== */
+.featured-products { padding: var(--space-8) 0; }
+
+.section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-5);
+}
+
+.section-header h2 { font-size: 24px; margin: 0; }
+.section-link { color: var(--color-primary); text-decoration: none; font-size: 14px; font-weight: 600; }
+.section-link:hover { text-decoration: underline; }
+.empty-state { color: var(--color-text-muted); font-size: 14px; }
+
+@media (max-width: 900px) { .value-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .hero h1 { font-size: 28px; } .value-grid { grid-template-columns: 1fr; } }
