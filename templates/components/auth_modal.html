@@ -1,0 +1,60 @@
+{% csrf_token %}
+<div class="modal-overlay" id="authModalOverlay" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+        <button type="button" class="modal-close" id="authModalClose" aria-label="Close">&times;</button>
+
+        <div class="modal-tabs">
+            <button type="button" class="modal-tab is-active" data-tab="login" id="tabLogin">Log In</button>
+            <button type="button" class="modal-tab" data-tab="signup" id="tabSignup">Sign Up</button>
+        </div>
+
+        <div class="modal-body">
+            <form id="loginForm" class="modal-form" novalidate>
+                <h2 id="authModalTitle">Welcome back</h2>
+                <div class="form-group">
+                    <label for="loginEmail">Email address</label>
+                    <input type="email" id="loginEmail" name="email" class="form-input" required>
+                    <span class="field-error" data-error-for="email"></span>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" class="form-input" required>
+                    <span class="field-error" data-error-for="password"></span>
+                </div>
+                <p class="modal-error" data-error-for="__all__"></p>
+                <button type="submit" class="btn btn-primary auth-submit" id="loginSubmitBtn">Log in</button>
+            </form>
+
+            <form id="signupForm" class="modal-form" novalidate hidden>
+                <h2>Create your account</h2>
+                <div class="form-group">
+                    <label for="signupFullName">Full name</label>
+                    <input type="text" id="signupFullName" name="full_name" class="form-input" required>
+                    <span class="field-error" data-error-for="full_name"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email address</label>
+                    <input type="email" id="signupEmail" name="email" class="form-input" required>
+                    <span class="field-error" data-error-for="email"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signupPhone">Phone number</label>
+                    <input type="tel" id="signupPhone" name="phone_number" class="form-input" required>
+                    <span class="field-error" data-error-for="phone_number"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword1">Password</label>
+                    <input type="password" id="signupPassword1" name="password1" class="form-input" required minlength="8">
+                    <span class="field-error" data-error-for="password1"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword2">Confirm password</label>
+                    <input type="password" id="signupPassword2" name="password2" class="form-input" required>
+                    <span class="field-error" data-error-for="password2"></span>
+                </div>
+                <p class="modal-error" data-error-for="__all__"></p>
+                <button type="submit" class="btn btn-primary auth-submit" id="signupSubmitBtn">Create account</button>
+            </form>
+        </div>
+    </div>
+</div>
