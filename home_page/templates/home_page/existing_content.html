@@ -1,0 +1,24 @@
+<section class="value-props">
+    <div class="container value-grid">
+        <div class="value-item"><h3>Free shipping</h3><p>On orders over ₹2,000</p></div>
+        <div class="value-item"><h3>Secure payment</h3><p>Encrypted checkout</p></div>
+        <div class="value-item"><h3>Easy returns</h3><p>30-day return window</p></div>
+        <div class="value-item"><h3>Support</h3><p>We're here to help</p></div>
+    </div>
+</section>
+
+<section class="featured-products">
+    <div class="container">
+        <div class="section-header">
+            <h2>Featured products</h2>
+            <a href="{% url 'products' %}" class="section-link">View all →</a>
+        </div>
+        <div class="product-grid">
+            {% for product in featured_products %}
+                {% include 'components/product_card.html' with product=product %}
+            {% empty %}
+                <p class="empty-state">No products added yet. Add some from the Django admin.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
