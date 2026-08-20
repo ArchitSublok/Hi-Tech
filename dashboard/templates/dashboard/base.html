@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Management | Hi-Tech{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/tokens.css' %}?v=20260819">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}?v=20260819">
+</head>
+<body class="management-body">
+    <header class="management-topbar">
+        <a href="{% url 'management:home' %}" class="management-brand"><span>H</span> Hi-Tech <small>Management</small></a>
+        <div class="management-account">
+            <span>{{ request.user.email }}</span>
+            <form method="post" action="{% url 'management:logout' %}">{% csrf_token %}<button type="submit">Sign out</button></form>
+        </div>
+    </header>
+    <div class="management-layout">
+        <aside class="management-sidebar" aria-label="Management navigation">
+            <nav>
+                <a href="{% url 'management:home' %}" class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}">Overview</a>
+                <a href="{% url 'management:products' %}" class="{% if 'product' in request.resolver_match.url_name %}is-active{% endif %}">Products</a>
+                <a href="{% url 'management:categories' %}" class="{% if 'categor' in request.resolver_match.url_name %}is-active{% endif %}">Categories</a>
+                <a href="{% url 'management:inventory' %}" class="{% if 'inventory' in request.resolver_match.url_name %}is-active{% endif %}">Inventory</a>
+                <a href="{% url 'management:orders' %}" class="{% if 'order' in request.resolver_match.url_name %}is-active{% endif %}">Orders</a>
+                <a href="{% url 'management:users' %}" class="{% if request.resolver_match.url_name == 'users' %}is-active{% endif %}">Customers</a>
+            </nav>
+            <a href="{% url 'home' %}" class="visit-site">View storefront &rarr;</a>
+        </aside>
+        <main class="management-content">
+            {% if messages %}
+                <div class="management-messages">
+                    {% for message in messages %}<div class="management-alert {{ message.tags }}">{{ message }}</div>{% endfor %}
+                </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

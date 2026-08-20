@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ product.name }} | Hi-Tech{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/product-card.css' %}?v=20260819">{% endblock %}
+{% block content %}
+<section class="product-detail"><div class="container product-detail-grid">
+    <div class="product-detail-image">{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<div class="product-card-placeholder"></div>{% endif %}</div>
+    <div class="product-detail-copy"><a href="{% url 'products' %}" class="back-link">&larr; All products</a><p class="eyebrow">{{ product.category.name }}</p><h1>{{ product.name }}</h1><p class="product-detail-price">&#8377;{{ product.price }}</p><div class="product-detail-description">{{ product.description|default:"Product details will be available soon."|linebreaksbr }}</div><p class="product-stock {% if not product.is_available %}is-out{% endif %}">{% if product.is_available %}{{ product.stock }} ready to ship{% else %}Currently unavailable{% endif %}</p>
+    {% if user.is_authenticated and product.is_available %}<form method="post" action="{% url 'cart:add' product.id %}" class="add-product-form">{% csrf_token %}<label for="quantity">Quantity</label><input id="quantity" type="number" name="quantity" value="1" min="1" max="{{ product.stock }}"><input type="hidden" name="next" value="{% url 'cart:detail' %}"><button class="btn btn-primary" type="submit">Add to cart</button></form>{% elif not user.is_authenticated %}<button type="button" class="auth-trigger-btn">Log in to add to cart</button>{% endif %}
+    </div>
+</div></section>
+{% endblock %}

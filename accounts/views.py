@@ -8,12 +8,24 @@ from .forms import SignUpForm, LoginForm
 from .models import UserProfile
 
 
+def _request_data(request):
+    """Accept the existing JSON clients as well as normal CSRF-protected forms."""
+    if request.content_type == 'application/json':
+        try:
+            return json.loads(request.body), None
+        except json.JSONDecodeError:
+            return None, JsonResponse(
+                {'success': False, 'errors': {'__all__': ['Invalid request.']}},
+                status=400,
+            )
+    return request.POST, None
+
+
 @require_POST
 def signup_api(request):
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({'success': False, 'errors': {'__all__': ['Invalid request.']}}, status=400)
+    data, error_response = _request_data(request)
+    if error_response:
+        return error_response
 
     form = SignUpForm(data)
     if form.is_valid():
@@ -40,10 +52,9 @@ def signup_api(request):
 
 @require_POST
 def login_api(request):
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({'success': False, 'errors': {'__all__': ['Invalid request.']}}, status=400)
+    data, error_response = _request_data(request)
+    if error_response:
+        return error_response
 
     form = LoginForm(data)
     if form.is_valid():

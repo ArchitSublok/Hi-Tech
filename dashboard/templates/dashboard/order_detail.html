@@ -1,0 +1,8 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}{{ order.number }} | Hi-Tech Management{% endblock %}
+{% block content %}
+<div class="management-page-heading"><div><p class="management-kicker">Order detail</p><h1>{{ order.number }}</h1><p>Placed {{ order.created_at|date:"d M Y, H:i" }} by {{ order.user.profile.full_name|default:order.user.username }}.</p></div><a href="{% url 'management:orders' %}" class="management-secondary">Back to orders</a></div>
+<section class="management-two-column"><div class="management-panel"><h2>Products purchased</h2><div class="order-items">{% for item in order.items.all %}<div><span><strong>{{ item.product_name }}</strong><small>{{ item.quantity }} &times; &#8377;{{ item.unit_price }}</small></span><b>&#8377;{{ item.line_total }}</b></div>{% endfor %}<div class="order-total"><strong>Total</strong><strong>&#8377;{{ order.subtotal }}</strong></div></div></div>
+<div class="management-panel form-panel"><h2>Order status</h2><form method="post" class="management-form">{% csrf_token %}<label for="{{ form.status.id_for_label }}">Status</label>{{ form.status }}{{ form.status.errors }}<p class="form-note">Cancelling an order returns its items to inventory. Reactivating a cancelled order deducts stock again.</p><button class="management-primary" type="submit">Save status</button></form></div></section>
+<section class="management-panel customer-summary"><h2>Customer</h2><dl><div><dt>Name</dt><dd>{{ order.user.profile.full_name|default:order.user.username }}</dd></div><div><dt>Email</dt><dd>{{ order.user.email }}</dd></div><div><dt>Phone</dt><dd>{{ order.user.profile.phone_number|default:"Not provided" }}</dd></div></dl></section>
+{% endblock %}

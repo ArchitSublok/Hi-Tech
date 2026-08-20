@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator
 from .models import Product, Category
 
 def products(request):
-    queryset = Product.objects.select_related('category').all()
+    queryset = Product.objects.select_related('category').filter(is_active=True)
 
     query = request.GET.get('q')
     if query:
@@ -40,3 +40,8 @@ def products(request):
         'selected_price_range': price_range,
         'search_query': query or '',
     })
+
+
+def product_detail(request, product_id):
+    product = get_object_or_404(Product.objects.select_related('category').filter(is_active=True), pk=product_id)
+    return render(request, 'products/product_detail.html', {'product': product})

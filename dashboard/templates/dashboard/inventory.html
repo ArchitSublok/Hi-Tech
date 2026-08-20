@@ -1,0 +1,8 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Inventory | Hi-Tech Management{% endblock %}
+{% block content %}
+<div class="management-page-heading"><div><p class="management-kicker">Stock control</p><h1>Inventory</h1><p>Update live stock levels and product availability.</p></div><a href="{% url 'management:product_create' %}" class="management-primary">Add product</a></div>
+<section class="management-panel table-panel"><div class="table-scroll"><table><thead><tr><th>Product</th><th>Category</th><th>Sold</th><th>Current quantity</th><th>Status</th><th>Update</th></tr></thead><tbody>
+{% for product in products %}<tr><td><strong>{{ product.name }}</strong></td><td>{{ product.category.name }}</td><td>{{ product.sold }}</td><td><form class="inventory-form" method="post" action="{% url 'management:inventory_update' product.id %}">{% csrf_token %}<input name="stock" type="number" value="{{ product.stock }}" min="0" aria-label="Stock for {{ product.name }}"></td><td><label class="toggle-label"><input name="is_active" type="checkbox" {% if product.is_active %}checked{% endif %}> <span>{% if product.is_active %}Available{% else %}Unavailable{% endif %}</span></label></td><td><button type="submit">Save</button></form></td></tr>{% empty %}<tr><td colspan="6" class="panel-empty">No products to inventory.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

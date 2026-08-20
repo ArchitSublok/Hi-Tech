@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% block title %}My orders | Hi-Tech{% endblock %}
 {% block content %}
-    <h1>My Orders</h1>
+<section class="commerce-page"><div class="container"><div class="commerce-heading"><div><p class="eyebrow">Account</p><h1>My orders</h1><p>Purchases and their current status.</p></div><a href="{% url 'products' %}" class="btn btn-secondary">Shop products</a></div>
+{% if orders %}<div class="customer-orders">{% for order in orders %}<article class="customer-order"><div class="customer-order-top"><div><strong>{{ order.number }}</strong><span>Placed {{ order.created_at|date:"d M Y, H:i" }}</span></div><span class="customer-status status-{{ order.status }}">{{ order.get_status_display }}</span></div><ul>{% for item in order.items.all %}<li><span>{{ item.product_name }} <small>&times; {{ item.quantity }}</small></span><strong>&#8377;{{ item.line_total }}</strong></li>{% endfor %}</ul><div class="customer-order-total"><span>Total</span><strong>&#8377;{{ order.subtotal }}</strong></div></article>{% endfor %}</div>{% else %}<div class="empty-commerce"><h2>No orders yet</h2><p>Your completed purchases will appear here.</p><a href="{% url 'products' %}" class="btn btn-primary">Browse products</a></div>{% endif %}</div></section>
 {% endblock %}

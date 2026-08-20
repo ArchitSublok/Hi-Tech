@@ -1,0 +1,10 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Products | Hi-Tech Management{% endblock %}
+{% block content %}
+<div class="management-page-heading"><div><p class="management-kicker">Catalogue</p><h1>Products</h1><p>Add, update, hide or remove products without touching code.</p></div><a href="{% url 'management:product_create' %}" class="management-primary">Add product</a></div>
+<form class="management-search" method="get"><input name="q" value="{{ query }}" placeholder="Search products or categories"><button type="submit">Search</button></form>
+<section class="management-panel table-panel"><div class="table-scroll"><table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Visibility</th><th></th></tr></thead><tbody>
+{% for product in products %}<tr><td><strong>{{ product.name }}</strong><small>{{ product.description|truncatechars:70 }}</small></td><td>{{ product.category.name }}</td><td>&#8377;{{ product.price }}</td><td>{{ product.stock }}</td><td><span class="status {% if product.is_active %}status-completed{% else %}status-cancelled{% endif %}">{% if product.is_active %}Visible{% else %}Hidden{% endif %}</span></td><td class="table-actions"><a href="{% url 'management:product_edit' product.id %}">Edit</a><form method="post" action="{% url 'management:product_delete' product.id %}" data-confirm="Delete {{ product.name }}? This cannot be undone.">{% csrf_token %}<button type="submit">Delete</button></form></td></tr>{% empty %}<tr><td colspan="6" class="panel-empty">No products found. Add your first product to start selling.</td></tr>{% endfor %}
+</tbody></table></div></section>
+<script>document.querySelectorAll('[data-confirm]').forEach(function(form){form.addEventListener('submit',function(event){if(!confirm(form.dataset.confirm)){event.preventDefault();}});});</script>
+{% endblock %}
