@@ -1,41 +1,24 @@
 <header class="navbar">
     <div class="navbar-inner container">
-        <a href="{% url 'home' %}" class="navbar-logo">
-            <span class="logo-mark">H</span>
-            <span>Hi-Tech</span>
-        </a>
-
-        <nav class="navbar-links" aria-label="Primary">
+        <a href="{% url 'home' %}" class="navbar-logo"><span class="logo-mark">H</span><span>Hi-Tech</span></a>
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+        <nav class="navbar-links" id="primaryNav" aria-label="Primary">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'products' %}">Products</a></li>
-                <li><a href="{% url 'about' %}">About Us</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="{% url 'about' %}">About us</a></li>
+                {% if user.is_authenticated %}<li><a href="{% url 'orders:order_list' %}">My orders</a></li>{% endif %}
             </ul>
         </nav>
-
-                <div class="navbar-actions">
+        <div class="navbar-actions">
             {% if user.is_authenticated %}
                 <span class="navbar-user">Hi, {{ user.profile.full_name|default:user.username }}</span>
-                <a href="{% url 'logout' %}" class="icon-btn" aria-label="Log out">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
-                </a>
+                {% if user.is_staff %}<a href="{% url 'management:home' %}" class="navbar-manage">Manage</a>{% endif %}
+                <a href="{% url 'logout' %}" class="icon-btn" aria-label="Log out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></a>
             {% else %}
                 <button type="button" class="auth-trigger-btn" id="authTriggerBtn">Login / Sign up</button>
             {% endif %}
-
-            <a href="#" class="icon-btn" aria-label="Cart">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                <span class="cart-badge">0</span>
-            </a>
+            <a href="{% url 'cart:detail' %}" class="icon-btn" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>{% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}</a>
         </div>
     </div>
 </header>

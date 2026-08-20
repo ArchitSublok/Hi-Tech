@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Hi-Tech{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
-    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
-    <link rel="stylesheet" href="{% static 'css/auth-modal.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tokens.css' %}?v=20260819">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=20260819">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}?v=20260819">
+    <link rel="stylesheet" href="{% static 'css/auth-modal.css' %}?v=20260819">
+    <link rel="stylesheet" href="{% static 'css/commerce.css' %}?v=20260819">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     {% block extra_css %}{% endblock %}
 </head>
@@ -25,13 +26,12 @@
     </div>
     {% endif %}
 
-    {% block content %}
-    {% endblock %}
+    <main>{% block content %}{% endblock %}</main>
 
     {% include 'footer.html' %}
 
-    <script src="{% static 'js/navbar.js' %}"></script>
-    <script src="{% static 'js/auth-modal.js' %}"></script>
+    <script src="{% static 'js/navbar.js' %}?v=20260819"></script>
+    <script src="{% static 'js/auth-modal.js' %}?v=20260820"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,10 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}{{ page_title }} | Hi-Tech Management{% endblock %}
+{% block content %}
+<div class="management-page-heading"><div><p class="management-kicker">Catalogue</p><h1>{{ page_title }}</h1><p>Product updates appear on the storefront straight away.</p></div><a href="{% url 'management:products' %}" class="management-secondary">Back to products</a></div>
+<section class="management-panel form-panel"><form method="post" enctype="multipart/form-data" class="management-form">{% csrf_token %}
+{% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+<div class="form-grid">{% for field in form %}<div class="form-field {% if field.name == 'description' %}form-field-wide{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{{ field.errors }}</div>{% endfor %}</div>
+{% if product.image %}<div class="current-image"><img src="{{ product.image.url }}" alt="{{ product.name }}"><span>Current product image</span></div>{% endif %}
+<button type="submit" class="management-primary">{{ submit_label }}</button></form></section>
+{% endblock %}
