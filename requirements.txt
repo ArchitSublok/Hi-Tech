@@ -1,4 +1,7 @@
 django
 gunicorn
+mysqlclient
 python-decouple
-pymysql
+argon2-cffi
+bcrypt
+Pillow
