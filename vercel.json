@@ -1,8 +1,22 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "Hi_Tech/wsgi.py": {
-      "maxDuration": 30
+  "builds": [
+    {
+      "src": "Hi_Tech/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.12"
+      }
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "Hi_Tech/wsgi.py"
+    }
+  ]
 }
