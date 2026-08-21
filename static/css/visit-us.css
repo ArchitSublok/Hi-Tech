@@ -1,0 +1,113 @@
+.visit-us {
+    background: var(--color-surface);
+    padding: var(--space-9) 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.visit-us-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-7);
+    align-items: stretch;
+}
+
+.visit-map {
+    position: relative;
+    min-height: 420px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 12px 30px rgba(11,37,69,.09);
+}
+
+.visit-map iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.visit-info { display: flex; flex-direction: column; }
+
+.visit-info .eyebrow {
+    color: var(--color-primary);
+    font-size: .8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin: 0 0 var(--space-3);
+}
+
+.visit-info h2 {
+    font-size: 1.7rem;
+    line-height: 1.25;
+    margin: 0 0 var(--space-4);
+    color: var(--color-text);
+}
+
+.visit-desc {
+    font-size: .95rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-5);
+}
+
+.visit-directions-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: var(--space-6);
+}
+
+.visit-reviews h3 {
+    font-size: 1rem;
+    margin: 0 0 var(--space-4);
+    color: var(--color-text);
+}
+
+.review-card {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-3);
+    transition: border-color var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.review-card:hover {
+    border-color: #b7c8d9;
+    box-shadow: 0 12px 30px rgba(11,37,69,.07);
+}
+
+.review-card:last-child { margin-bottom: 0; }
+
+.review-stars {
+    color: #f0a500;
+    font-size: .8rem;
+    margin-bottom: .4rem;
+    letter-spacing: 2px;
+}
+
+.review-text {
+    font-size: .88rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    margin: 0 0 .4rem;
+}
+
+.review-author {
+    font-size: .8rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .visit-us-grid { grid-template-columns: 1fr; }
+    .visit-map { min-height: 320px; }
+}
+
+@media (max-width: 480px) {
+    .visit-us { padding: var(--space-7) 0; }
+}
