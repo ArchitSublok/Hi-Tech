@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/footer.css' %}?v=20260819">
     <link rel="stylesheet" href="{% static 'css/auth-modal.css' %}?v=20260819">
     <link rel="stylesheet" href="{% static 'css/commerce.css' %}?v=20260819">
+    <link rel="stylesheet" href="{% static 'css/visit-us.css' %}?v=20260821">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     {% block extra_css %}{% endblock %}
 </head>
@@ -28,6 +29,7 @@
 
     <main>{% block content %}{% endblock %}</main>
 
+        {% include 'components/visit_us.html' %}
     {% include 'footer.html' %}
 
     <script src="{% static 'js/navbar.js' %}?v=20260819"></script>
