@@ -31,7 +31,7 @@
             </div>
 
             <div class="collection-header-actions">
-                <button type="button" class="filter-toggle-btn" id="filterToggle">Filters</button>
+                <button type="button" class="filter-toggle-btn" id="filterToggle" aria-expanded="false" aria-controls="collectionFilters">Filters</button>
                 <select class="sort-select" onchange="location.href=this.value">
                     <option value="?sort=newest{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if not selected_sort %}selected{% endif %}>Newest</option>
                     <option value="?sort=price_asc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>

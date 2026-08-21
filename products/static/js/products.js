@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (toggleBtn && filters) {
         toggleBtn.addEventListener('click', function () {
-            filters.classList.toggle('is-open');
+            var open = filters.classList.toggle('is-open');
+            toggleBtn.setAttribute('aria-expanded', String(open));
         });
     }
 });
