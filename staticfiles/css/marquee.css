@@ -1,0 +1,50 @@
+/* ===== MARQUEE ===== */
+.marquee-section {
+    background: var(--color-navy-mid);
+    padding: var(--space-5) 0;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 30s linear infinite;
+}
+
+.marquee-content {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.marquee-item {
+    color: var(--color-steel);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    padding: 0 var(--space-5);
+}
+
+.marquee-divider {
+    color: rgba(141, 169, 196, 0.4);
+    font-size: 13px;
+}
+
+@keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* Pause on hover so the strip is easy to read */
+.marquee-section:hover .marquee-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+}
+
+@media (max-width: 640px) {
+    .marquee-item { font-size: 12px; padding: 0 var(--space-4); }
+}
