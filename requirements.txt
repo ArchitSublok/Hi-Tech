@@ -5,3 +5,4 @@ python-decouple
 argon2-cffi
 bcrypt
 Pillow
+whitenoise
