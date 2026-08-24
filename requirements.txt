@@ -1,6 +1,6 @@
 django
 gunicorn
-mysqlclient
+pymysql
 python-decouple
 argon2-cffi
 bcrypt
