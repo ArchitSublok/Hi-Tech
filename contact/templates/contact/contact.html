@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Contact Us | Hi-Tech{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/contact.css' %}">{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+    <div class="container contact-grid">
+
+        <div class="contact-form-panel">
+            <p class="eyebrow">Get in touch</p>
+            <h1>Contact us</h1>
+            <p class="contact-lede">Have a question about an order, a product, or anything else? Send us a message and we'll get back to you.</p>
+
+            <form method="post" class="contact-form" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+
+                <div class="form-field">
+                    <label for="{{ form.name.id_for_label }}">Name</label>
+                    {{ form.name }}
+                    {{ form.name.errors }}
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.subject.id_for_label }}">Subject</label>
+                    {{ form.subject }}
+                    {{ form.subject.errors }}
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.message.id_for_label }}">Message</label>
+                    {{ form.message }}
+                    {{ form.message.errors }}
+                </div>
+
+                <button type="submit" class="btn btn-primary contact-submit">Send message</button>
+            </form>
+        </div>
+
+        <div class="contact-info-panel">
+            <div class="contact-info-card">
+                <p class="eyebrow">Reach us directly</p>
+
+                <div class="contact-info-item">
+                    <span class="contact-info-icon"><i class="fa-solid fa-location-dot"></i></span>
+                    <div>
+                        <h3>Office</h3>
+                        <p>123 Tech Park, Silicon Avenue, Suite 400,<br>Bangalore, India</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <span class="contact-info-icon"><i class="fa-solid fa-envelope"></i></span>
+                    <div>
+                        <h3>Email</h3>
+                        <p><a href="mailto:support@example.com">support@example.com</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <span class="contact-info-icon"><i class="fa-solid fa-phone"></i></span>
+                    <div>
+                        <h3>Phone</h3>
+                        <p><a href="tel:+915550192834">+91 (555) 019-2834</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <span class="contact-info-icon"><i class="fa-solid fa-user"></i></span>
+                    <div>
+                        <h3>Managing Director</h3>
+                        <p>Alex Morgan</p>
+                    </div>
+                </div>
+
+                <div class="contact-hours">
+                    <h3>Business hours</h3>
+                    <p>Monday – Saturday, 10:00 AM – 7:00 PM IST<br>Closed on public holidays</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

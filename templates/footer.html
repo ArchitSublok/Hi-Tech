@@ -1,6 +1,6 @@
 <footer class="site-footer"><div class="footer-inner container">
     <div class="footer-col"><h4>Shop</h4><ul><li><a href="{% url 'products' %}">All products</a></li><li><a href="{% url 'cart:detail' %}">Your cart</a></li>{% if user.is_authenticated %}<li><a href="{% url 'orders:order_list' %}">My orders</a></li>{% endif %}</ul></div>
     <div class="footer-col"><h4>Hi-Tech</h4><ul><li><a href="{% url 'about' %}">About us</a></li><li><a href="{% url 'products' %}">Featured products</a></li><li><a href="{% url 'home' %}">Our approach</a></li></ul></div>
-    <div class="footer-col"><h4>Customer care</h4><ul><li>Secure checkout</li><li>30-day returns</li><li>Helpful support</li></ul></div>
+    <div class="footer-col"><h4>Customer care</h4><ul><li><a href="{% url 'contact' %}">Contact us</a></li><li>Secure checkout</li><li>30-day returns</li></ul></div>
     <div class="footer-col footer-brand"><a href="{% url 'home' %}" class="footer-logo" aria-label="Hi-Tech home"><span class="logo-mark">H</span><span>Hi-Tech</span></a><p class="footer-address">Technology chosen with care, clear product information and service you can rely on.</p></div>
 </div><div class="footer-disclaimer container"><p>Product availability and final delivery details are confirmed when your order is placed.</p></div><div class="footer-bottom"><div class="footer-bottom-inner container"><p class="footer-copyright">&copy; Copyright 2026 Hi-Tech. All rights reserved.</p></div></div></footer>

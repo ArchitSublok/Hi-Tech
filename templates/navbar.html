@@ -7,6 +7,7 @@
                 <li><a href="{% url 'home' %}" class="{% if request.resolver_match.view_name == 'home' %}is-active{% endif %}">Home</a></li>
                 <li><a href="{% url 'products' %}" class="{% if request.resolver_match.view_name == 'products' %}is-active{% endif %}">Products</a></li>
                 <li><a href="{% url 'about' %}" class="{% if request.resolver_match.view_name == 'about' %}is-active{% endif %}">About us</a></li>
+                <li><a href="{% url 'contact' %}" class="{% if request.resolver_match.view_name == 'contact' %}is-active{% endif %}">Contact us</a></li>
                 {% if user.is_authenticated %}<li><a href="{% url 'orders:order_list' %}" class="{% if request.resolver_match.view_name == 'orders:order_list' %}is-active{% endif %}">My orders</a></li>{% endif %}
             </ul>
         </nav>
