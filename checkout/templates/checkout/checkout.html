@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Checkout | Hi-Tech{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+{% endblock %}
+{% block content %}
+<section class="auth-section">
+    <div class="checkout-card">
+        <h1>Checkout</h1>
+
+        <form method="post" id="checkoutForm">
+            {% csrf_token %}
+
+            {% if saved_addresses %}
+            <div class="form-group">
+                <label>Deliver to</label>
+                <select name="address_id" id="addressSelect" class="form-input">
+                    {% for addr in saved_addresses %}
+                        <option value="{{ addr.id }}">{{ addr.recipient_name }} — {{ addr.area_locality }}, {{ addr.city }}</option>
+                    {% endfor %}
+                    <option value="new">+ Add a new address</option>
+                </select>
+            </div>
+            {% endif %}
+
+            <div id="newAddressFields">
+                <div class="form-group"><label>Search your area</label>
+                    <input type="text" id="geocodeSearch" class="form-input" placeholder="Type your locality, landmark, or city...">
+                </div>
+
+                <div id="checkoutMap" class="checkout-map"></div>
+
+                <div class="form-group"><label>Recipient name</label><input type="text" name="recipient_name" class="form-input" required></div>
+                <div class="form-group"><label>Phone</label><input type="text" name="phone" class="form-input" required></div>
+                <div class="form-group"><label>Street address</label><textarea name="street_address" class="form-input" rows="2" required></textarea></div>
+                <div class="form-group"><label>Area / Locality</label><input type="text" id="areaLocality" name="area_locality" class="form-input" required></div>
+                <div class="form-group"><label>City</label><input type="text" id="cityField" name="city" class="form-input" required></div>
+                <div class="form-group"><label>State</label><input type="text" id="stateField" name="state" class="form-input" required></div>
+                <div class="form-group"><label>Postal code</label><input type="text" id="postalField" name="postal_code" class="form-input" required></div>
+
+                <input type="hidden" id="latField" name="latitude">
+                <input type="hidden" id="lngField" name="longitude">
+            </div>
+
+            <div class="form-group">
+                <label>Payment method</label>
+                {% for value, label in available_methods %}
+                <label class="payment-option">
+                    <input type="radio" name="payment_method" value="{{ value }}" {% if forloop.first %}checked{% endif %} required>
+                    {{ label }}
+                </label>
+                {% endfor %}
+                {% if subtotal >= cod_threshold %}
+                <p class="form-hint">Cash on Delivery isn't available for orders ₹{{ cod_threshold }} and above.</p>
+                {% endif %}
+            </div>
+
+            <p class="checkout-total">Order total: ₹{{ subtotal }}</p>
+            <button type="submit" class="btn btn-primary auth-submit">Place order</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'js/checkout-map.js' %}"></script>
+{% endblock %}

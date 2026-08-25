@@ -4,6 +4,7 @@ from decimal import Decimal
 from django.db import transaction
 
 from cart.models import Cart
+from payments.validators import validate_payment_method
 from products.models import Product
 
 from .models import Order, OrderItem
@@ -14,7 +15,7 @@ class CheckoutError(Exception):
 
 
 @transaction.atomic
-def create_order_from_cart(user):
+def create_order_from_cart(user, address, payment_method):
     """Create an immutable purchase record and reduce stock in one transaction."""
     try:
         cart = Cart.objects.select_for_update().get(user=user)
@@ -41,7 +42,25 @@ def create_order_from_cart(user):
             raise CheckoutError(f'Only {product.stock} unit(s) of {product.name} are available.')
 
     subtotal = sum((locked_products[item.product_id].price * item.quantity for item in cart_items), Decimal('0.00'))
-    order = Order.objects.create(user=user, subtotal=subtotal)
+
+    try:
+        validate_payment_method(subtotal, payment_method)
+    except Exception as exc:
+        raise CheckoutError(str(exc)) from exc
+
+    order = Order.objects.create(
+        user=user,
+        subtotal=subtotal,
+        payment_method=payment_method,
+        recipient_name=address.recipient_name,
+        phone=address.phone,
+        shipping_address=f"{address.street_address}, {address.area_locality}",
+        city=address.city,
+        state=address.state,
+        postal_code=address.postal_code,
+        latitude=address.latitude,
+        longitude=address.longitude,
+    )
     OrderItem.objects.bulk_create([
         OrderItem(
             order=order,

@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
 
+from payments.choices import PaymentMethod
 from products.models import Product
 
 
@@ -26,6 +27,16 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     stock_reduced = models.BooleanField(default=True, editable=False)
+
+    payment_method = models.CharField(max_length=16, choices=PaymentMethod.choices, default=PaymentMethod.COD)
+    recipient_name = models.CharField(max_length=150, blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+    shipping_address = models.TextField(blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    postal_code = models.CharField(max_length=12, blank=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
 
     class Meta:
         ordering = ['-created_at']
