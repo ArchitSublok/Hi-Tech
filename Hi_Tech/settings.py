@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'contact',
     'payments',
     'checkout',
+    'wishlist',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.views.cart_summary',
+                'wishlist.views.wishlist_summary',
             ],
         },
     },

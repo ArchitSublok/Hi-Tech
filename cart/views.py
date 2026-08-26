@@ -88,9 +88,11 @@ def remove_cart_item(request, item_id):
 
 
 def cart_summary(request):
+    
     if not request.user.is_authenticated:
         return {'cart_count': 0}
     try:
         return {'cart_count': request.user.cart.total_items}
     except Cart.DoesNotExist:
         return {'cart_count': 0}
+    

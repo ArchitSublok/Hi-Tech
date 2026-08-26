@@ -1,0 +1,8 @@
+.wishlist-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-5)}
+.wishlist-card{display:flex;flex-direction:column;gap:.5rem}
+.wishlist-remove-form{text-align:center}
+.wishlist-remove-form button{background:none;border:1px solid var(--color-border);border-radius:var(--radius-sm);padding:6px 12px;font-size:.8rem;color:var(--color-text-muted);cursor:pointer;transition:border-color var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard)}
+.wishlist-remove-form button:hover{border-color:var(--color-primary);color:var(--color-primary)}
+@media(max-width:980px){.wishlist-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:680px){.wishlist-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:390px){.wishlist-grid{grid-template-columns:1fr}}

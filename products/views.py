@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator
 from .models import Product, Category
 
+
 def products(request):
     queryset = Product.objects.select_related('category').filter(is_active=True)
 
@@ -32,6 +33,10 @@ def products(request):
     paginator = Paginator(queryset, 12)
     page_obj = paginator.get_page(request.GET.get('page'))
 
+    wishlisted_ids = set()
+    if request.user.is_authenticated:
+        wishlisted_ids = set(request.user.wishlist_items.values_list('product_id', flat=True))
+
     return render(request, 'products/products.html', {
         'products': page_obj,
         'categories': Category.objects.all(),
@@ -39,9 +44,13 @@ def products(request):
         'selected_sort': sort,
         'selected_price_range': price_range,
         'search_query': query or '',
+        'wishlisted_ids': wishlisted_ids,
     })
 
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product.objects.select_related('category').filter(is_active=True), pk=product_id)
-    return render(request, 'products/product_detail.html', {'product': product})
+    wishlisted_ids = set()
+    if request.user.is_authenticated:
+        wishlisted_ids = set(request.user.wishlist_items.values_list('product_id', flat=True))
+    return render(request, 'products/product_detail.html', {'product': product, 'wishlisted_ids': wishlisted_ids})

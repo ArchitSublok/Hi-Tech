@@ -1,5 +1,10 @@
 <article class="product-card">
-    <a href="{% url 'product_detail' product.id %}" class="product-card-image-link" aria-label="View {{ product.name }}"><div class="product-card-image">{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<div class="product-card-placeholder"></div>{% endif %}</div></a>
+    <div class="product-card-image-wrap">
+        <a href="{% url 'product_detail' product.id %}" class="product-card-image-link" aria-label="View {{ product.name }}"><div class="product-card-image">{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<div class="product-card-placeholder"></div>{% endif %}</div></a>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'wishlist:toggle' product.id %}" class="wishlist-toggle-form">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button type="submit" class="wishlist-toggle-btn {% if product.id in wishlisted_ids %}is-active{% endif %}" aria-label="Toggle wishlist"><svg viewBox="0 0 24 24" fill="{% if product.id in wishlisted_ids %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button></form>
+        {% endif %}
+    </div>
     <div class="product-card-body">
         <p class="product-card-category">{{ product.category.name }}</p>
         <h3 class="product-card-title"><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
