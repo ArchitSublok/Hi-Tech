@@ -19,9 +19,9 @@
                 <label>Deliver to</label>
                 <select name="address_id" id="addressSelect" class="form-input">
                     {% for addr in saved_addresses %}
-                        <option value="{{ addr.id }}">{{ addr.recipient_name }} — {{ addr.area_locality }}, {{ addr.city }}</option>
+                        <option value="{{ addr.id }}" {% if request.POST.address_id == addr.id|stringformat:"s" %}selected{% endif %}>{{ addr.recipient_name }} — {{ addr.area_locality }}, {{ addr.city }}</option>
                     {% endfor %}
-                    <option value="new">+ Add a new address</option>
+                    <option value="new" {% if request.POST.address_id == 'new' or address_form.errors %}selected{% endif %}>+ Add a new address</option>
                 </select>
             </div>
             {% endif %}
@@ -33,16 +33,16 @@
 
                 <div id="checkoutMap" class="checkout-map"></div>
 
-                <div class="form-group"><label>Recipient name</label><input type="text" name="recipient_name" class="form-input" required></div>
-                <div class="form-group"><label>Phone</label><input type="text" name="phone" class="form-input" required></div>
-                <div class="form-group"><label>Street address</label><textarea name="street_address" class="form-input" rows="2" required></textarea></div>
-                <div class="form-group"><label>Area / Locality</label><input type="text" id="areaLocality" name="area_locality" class="form-input" required></div>
-                <div class="form-group"><label>City</label><input type="text" id="cityField" name="city" class="form-input" required></div>
-                <div class="form-group"><label>State</label><input type="text" id="stateField" name="state" class="form-input" required></div>
-                <div class="form-group"><label>Postal code</label><input type="text" id="postalField" name="postal_code" class="form-input" required></div>
+                <div class="form-group"><label for="recipientName">Recipient name</label><input type="text" id="recipientName" name="recipient_name" value="{{ address_form.recipient_name.value|default_if_none:'' }}" class="form-input" required>{{ address_form.recipient_name.errors }}</div>
+                <div class="form-group"><label for="phoneField">Phone</label><input type="text" id="phoneField" name="phone" value="{{ address_form.phone.value|default_if_none:'' }}" class="form-input" required>{{ address_form.phone.errors }}</div>
+                <div class="form-group"><label for="streetField">Street address</label><textarea id="streetField" name="street_address" class="form-input" rows="2" required>{{ address_form.street_address.value|default_if_none:'' }}</textarea>{{ address_form.street_address.errors }}</div>
+                <div class="form-group"><label for="areaLocality">Area / Locality</label><input type="text" id="areaLocality" name="area_locality" value="{{ address_form.area_locality.value|default_if_none:'' }}" class="form-input" required>{{ address_form.area_locality.errors }}</div>
+                <div class="form-group"><label for="cityField">City</label><input type="text" id="cityField" name="city" value="{{ address_form.city.value|default_if_none:'' }}" class="form-input" required>{{ address_form.city.errors }}</div>
+                <div class="form-group"><label for="stateField">State</label><input type="text" id="stateField" name="state" value="{{ address_form.state.value|default_if_none:'' }}" class="form-input" required>{{ address_form.state.errors }}</div>
+                <div class="form-group"><label for="postalField">Postal code</label><input type="text" id="postalField" name="postal_code" value="{{ address_form.postal_code.value|default_if_none:'' }}" class="form-input" required>{{ address_form.postal_code.errors }}</div>
 
-                <input type="hidden" id="latField" name="latitude">
-                <input type="hidden" id="lngField" name="longitude">
+                <input type="hidden" id="latField" name="latitude" value="{{ address_form.latitude.value|default_if_none:'' }}">
+                <input type="hidden" id="lngField" name="longitude" value="{{ address_form.longitude.value|default_if_none:'' }}">
             </div>
 
             <div class="form-group">
@@ -53,12 +53,12 @@
                     {{ label }}
                 </label>
                 {% endfor %}
-                {% if subtotal >= cod_threshold %}
+                {% if order_total >= cod_threshold %}
                 <p class="form-hint">Cash on Delivery isn't available for orders ₹{{ cod_threshold }} and above.</p>
                 {% endif %}
             </div>
 
-            <p class="checkout-total">Order total: ₹{{ subtotal }}</p>
+            <p class="checkout-total">Order total: ₹{{ order_total }}</p>
             <button type="submit" class="btn btn-primary auth-submit">Place order</button>
         </form>
     </div>

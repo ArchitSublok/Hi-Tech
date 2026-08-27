@@ -13,10 +13,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('latField').value = lat;
         document.getElementById('lngField').value = lng;
         if (data && data.address) {
-            document.getElementById('areaLocality').value = data.address.suburb || data.address.neighbourhood || '';
-            document.getElementById('cityField').value = data.address.city || data.address.town || data.address.village || '';
-            document.getElementById('stateField').value = data.address.state || '';
-            document.getElementById('postalField').value = data.address.postcode || '';
+            const address = data.address;
+            document.getElementById('streetField').value = [address.house_number, address.road].filter(Boolean).join(' ');
+            document.getElementById('areaLocality').value = address.suburb || address.neighbourhood || address.quarter || '';
+            document.getElementById('cityField').value = address.city || address.town || address.village || '';
+            document.getElementById('stateField').value = address.state || '';
+            document.getElementById('postalField').value = address.postcode || '';
         }
     }
 
@@ -58,4 +60,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         }, 600);
     });
+
+    const addressSelect = document.getElementById('addressSelect');
+    const newAddressFields = document.getElementById('newAddressFields');
+    function toggleNewAddressFields() {
+        const needsNewAddress = !addressSelect || addressSelect.value === 'new';
+        newAddressFields.hidden = !needsNewAddress;
+        newAddressFields.querySelectorAll('input, textarea').forEach(function (field) {
+            field.disabled = !needsNewAddress;
+        });
+        if (needsNewAddress) {
+            window.setTimeout(function () { map.invalidateSize(); }, 0);
+        }
+    }
+
+    if (addressSelect) {
+        addressSelect.addEventListener('change', toggleNewAddressFields);
+    }
+    toggleNewAddressFields();
 });

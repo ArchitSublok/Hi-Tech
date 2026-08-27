@@ -14,6 +14,24 @@ class CheckoutError(Exception):
     """A customer-facing checkout validation error."""
 
 
+def calculate_order_total(cart_items):
+    """Return the final checkout total used for payment eligibility.
+
+    This store currently has no configured shipping, tax, or discount rules, so
+    each is zero and the final total equals the product subtotal. Keeping the
+    calculation in one place means those adjustments can be added without
+    changing payment validation code.
+    """
+    subtotal = sum(
+        (item.product.price * item.quantity for item in cart_items),
+        Decimal('0.00'),
+    )
+    shipping = Decimal('0.00')
+    taxes = Decimal('0.00')
+    discounts = Decimal('0.00')
+    return subtotal + shipping + taxes - discounts
+
+
 @transaction.atomic
 def create_order_from_cart(user, address, payment_method):
     """Create an immutable purchase record and reduce stock in one transaction."""
@@ -42,9 +60,10 @@ def create_order_from_cart(user, address, payment_method):
             raise CheckoutError(f'Only {product.stock} unit(s) of {product.name} are available.')
 
     subtotal = sum((locked_products[item.product_id].price * item.quantity for item in cart_items), Decimal('0.00'))
+    order_total = subtotal
 
     try:
-        validate_payment_method(subtotal, payment_method)
+        validate_payment_method(order_total, payment_method)
     except Exception as exc:
         raise CheckoutError(str(exc)) from exc
 
