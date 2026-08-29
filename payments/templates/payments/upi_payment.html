@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Pay via UPI | Hi-Tech{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/auth.css' %}">{% endblock %}
+{% block content %}
+<section class="auth-section">
+    <div class="checkout-card" style="text-align:center;">
+        <h1>Complete your payment</h1>
+        <p class="auth-sub">Order {{ order.number }} — &#8377;{{ order.subtotal }}</p>
+
+        <img src="{{ qr_url }}" alt="UPI QR code" style="margin:1.5rem auto;border-radius:var(--radius-md);border:1px solid var(--color-border);">
+
+        <p class="form-hint">Scan this with any UPI app (GPay, PhonePe, Paytm), or on mobile:</p>
+        <a href="{{ upi_link }}" class="btn btn-primary auth-submit" style="display:inline-block;text-decoration:none;">Open UPI app</a>
+
+        <p class="form-hint" style="margin-top:1.5rem;">Once paid, your order stays as "{{ order.get_status_display }}" until we confirm receipt — you'll see it update in <a href="{% url 'orders:order_list' %}">My Orders</a>.</p>
+    </div>
+</section>
+{% endblock %}

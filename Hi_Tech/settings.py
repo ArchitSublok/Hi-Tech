@@ -104,6 +104,12 @@ DATABASES = {
     }
 }
 
+# Payments
+# UPI_ID is where customer payments are actually requested to land — keep it
+# in .env (and in Vercel's Environment Variables for production), never hardcode it here.
+UPI_ID = config('UPI_ID', default='')
+UPI_PAYEE_NAME = config('UPI_PAYEE_NAME', default='Hi-Tech')
+
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 

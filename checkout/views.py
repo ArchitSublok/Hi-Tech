@@ -1,13 +1,13 @@
+from decimal import Decimal
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 
 from cart.models import Cart
-from orders.services import CheckoutError, calculate_order_total, create_order_from_cart
-from payments.choices import COD_THRESHOLD
-from payments.validators import PaymentValidationError, available_payment_methods, validate_payment_method
-from .forms import AddressForm
+from orders.services import create_order_from_cart, CheckoutError
+from payments.choices import PaymentMethod
+from payments.validators import available_payment_methods
 from .models import Address
 
 
@@ -18,45 +18,42 @@ def checkout_view(request):
         messages.info(request, "Your cart is empty.")
         return redirect('cart:detail')
 
-    cart_items = cart.items.select_related('product')
-    order_total = calculate_order_total(cart_items)
+    subtotal = sum((item.product.price * item.quantity for item in cart.items.select_related('product')), Decimal('0.00'))
     saved_addresses = Address.objects.filter(user=request.user)
-    address_form = AddressForm()
 
     if request.method == 'POST':
         address_id = request.POST.get('address_id')
         payment_method = request.POST.get('payment_method')
-        try:
-            validate_payment_method(order_total, payment_method)
-        except PaymentValidationError as exc:
-            # Keep the server authoritative if a client submits a hidden COD option.
-            return HttpResponseBadRequest(str(exc))
 
         if address_id and address_id != 'new':
             address = get_object_or_404(Address, id=address_id, user=request.user)
         else:
-            address_form = AddressForm(request.POST)
-            address = None
-            if address_form.is_valid():
-                address = address_form.save(commit=False)
-                address.user = request.user
-                address.save()
-            else:
-                messages.error(request, 'Please correct the delivery address errors below.')
+            address = Address.objects.create(
+                user=request.user,
+                recipient_name=request.POST.get('recipient_name', '').strip(),
+                phone=request.POST.get('phone', '').strip(),
+                street_address=request.POST.get('street_address', '').strip(),
+                area_locality=request.POST.get('area_locality', '').strip(),
+                city=request.POST.get('city', '').strip(),
+                state=request.POST.get('state', '').strip(),
+                postal_code=request.POST.get('postal_code', '').strip(),
+                latitude=request.POST.get('latitude') or None,
+                longitude=request.POST.get('longitude') or None,
+            )
 
-        if address:
-            try:
-                order = create_order_from_cart(request.user, address, payment_method)
-            except CheckoutError as exc:
-                messages.error(request, str(exc))
-            else:
-                messages.success(request, f"Order {order.number} placed successfully.")
-                return redirect('orders:order_list')
+        try:
+            order = create_order_from_cart(request.user, address, payment_method)
+        except CheckoutError as exc:
+            messages.error(request, str(exc))
+        else:
+            if payment_method == PaymentMethod.UPI:
+                return redirect('payments:upi_payment', order_number=order.number)
+            messages.success(request, f"Order {order.number} placed successfully.")
+            return redirect('orders:order_list')
 
     return render(request, 'checkout/checkout.html', {
         'saved_addresses': saved_addresses,
-        'address_form': address_form,
-        'order_total': order_total,
-        'available_methods': available_payment_methods(order_total),
-        'cod_threshold': COD_THRESHOLD,
+        'subtotal': subtotal,
+        'available_methods': available_payment_methods(subtotal),
+        'cod_threshold': 300,
     })
