@@ -6,4 +6,4 @@ argon2-cffi
 bcrypt
 Pillow
 whitenoise
-razorpay
+razorpayk
