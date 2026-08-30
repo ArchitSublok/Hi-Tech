@@ -24,6 +24,8 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='orders')
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.CONFIRMED, db_index=True)
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    coupon_code = models.CharField(max_length=32, blank=True)
+    discount_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     stock_reduced = models.BooleanField(default=True, editable=False)
@@ -43,6 +45,10 @@ class Order(models.Model):
 
     def __str__(self):
         return self.number
+
+    @property
+    def total(self):
+        return self.subtotal - self.discount_amount
 
     @property
     def total_quantity(self):

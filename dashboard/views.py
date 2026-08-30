@@ -11,11 +11,16 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
+
+from coupons.models import Coupon
+
+
+
 from orders.models import Order
 from orders.services import CheckoutError, change_order_status
 from products.models import Category, Product
 
-from .forms import CategoryForm, InventoryForm, OrderStatusForm, ProductForm, StaffLoginForm
+from .forms import CategoryForm, CouponForm, InventoryForm, OrderStatusForm, ProductForm, StaffLoginForm
 
 
 def _is_staff(user):
@@ -205,3 +210,56 @@ def user_list(request):
             | Q(profile__phone_number__icontains=query)
         )
     return render(request, 'dashboard/users.html', {'users': users, 'query': query})
+
+
+@staff_required
+def coupon_list(request):
+    query = request.GET.get('q', '').strip()
+    coupons = Coupon.objects.all()
+    if query:
+        coupons = coupons.filter(code__icontains=query)
+    return render(request, 'dashboard/coupons.html', {'coupons': coupons, 'query': query})
+
+
+@staff_required
+def coupon_create(request):
+    form = CouponForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        coupon = form.save(commit=False)
+        coupon.created_by = request.user
+        coupon.save()
+        form.save_m2m()
+        messages.success(request, f'Coupon {coupon.code} was created.')
+        return redirect('management:coupons')
+    return render(request, 'dashboard/coupon_form.html', {'form': form, 'page_title': 'Add coupon', 'submit_label': 'Add coupon'})
+
+
+@staff_required
+def coupon_edit(request, coupon_id):
+    coupon = get_object_or_404(Coupon, pk=coupon_id)
+    form = CouponForm(request.POST or None, instance=coupon)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, f'Coupon {coupon.code} was updated.')
+        return redirect('management:coupons')
+    return render(request, 'dashboard/coupon_form.html', {'form': form, 'coupon': coupon, 'page_title': 'Edit coupon', 'submit_label': 'Save changes'})
+
+
+@staff_required
+@require_POST
+def coupon_delete(request, coupon_id):
+    coupon = get_object_or_404(Coupon, pk=coupon_id)
+    code = coupon.code
+    coupon.delete()
+    messages.success(request, f'Coupon {code} was deleted.')
+    return redirect('management:coupons')
+
+
+@staff_required
+@require_POST
+def coupon_toggle(request, coupon_id):
+    coupon = get_object_or_404(Coupon, pk=coupon_id)
+    coupon.is_active = not coupon.is_active
+    coupon.save(update_fields=['is_active'])
+    messages.success(request, f'Coupon {coupon.code} is now {"active" if coupon.is_active else "inactive"}.')
+    return redirect('management:coupons')

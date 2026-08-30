@@ -24,6 +24,7 @@ def checkout_view(request):
     if request.method == 'POST':
         address_id = request.POST.get('address_id')
         payment_method = request.POST.get('payment_method')
+        coupon_code = request.POST.get('coupon_code', '').strip()
 
         if address_id and address_id != 'new':
             address = get_object_or_404(Address, id=address_id, user=request.user)
@@ -42,10 +43,12 @@ def checkout_view(request):
             )
 
         try:
-            order = create_order_from_cart(request.user, address, payment_method)
+            order = create_order_from_cart(request.user, address, payment_method, coupon_code)
         except CheckoutError as exc:
             messages.error(request, str(exc))
         else:
+            if order.discount_amount:
+                messages.success(request, f"Order {order.number} placed — you saved ₹{order.discount_amount} with {order.coupon_code}.")
             if payment_method == PaymentMethod.UPI:
                 return redirect('payments:upi_payment', order_number=order.number)
             messages.success(request, f"Order {order.number} placed successfully.")
@@ -54,6 +57,7 @@ def checkout_view(request):
     return render(request, 'checkout/checkout.html', {
         'saved_addresses': saved_addresses,
         'subtotal': subtotal,
+        'order_total': subtotal,
         'available_methods': available_payment_methods(subtotal),
         'cod_threshold': 300,
     })

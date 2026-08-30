@@ -4,6 +4,7 @@ from decimal import Decimal
 from django.db import transaction
 
 from cart.models import Cart
+from coupons.services import CouponError, calculate_discount, get_valid_coupon
 from payments.validators import validate_payment_method
 from products.models import Product
 
@@ -15,12 +16,11 @@ class CheckoutError(Exception):
 
 
 def calculate_order_total(cart_items):
-    """Return the final checkout total used for payment eligibility.
+    """Return the pre-coupon checkout total.
 
-    This store currently has no configured shipping, tax, or discount rules, so
-    each is zero and the final total equals the product subtotal. Keeping the
-    calculation in one place means those adjustments can be added without
-    changing payment validation code.
+    This store currently has no configured shipping or tax rules, so each is
+    zero and the total equals the product subtotal. Keeping the calculation in
+    one place means those can be added without touching payment validation code.
     """
     subtotal = sum(
         (item.product.price * item.quantity for item in cart_items),
@@ -28,12 +28,11 @@ def calculate_order_total(cart_items):
     )
     shipping = Decimal('0.00')
     taxes = Decimal('0.00')
-    discounts = Decimal('0.00')
-    return subtotal + shipping + taxes - discounts
+    return subtotal + shipping + taxes
 
 
 @transaction.atomic
-def create_order_from_cart(user, address, payment_method):
+def create_order_from_cart(user, address, payment_method, coupon_code=''):
     """Create an immutable purchase record and reduce stock in one transaction."""
     try:
         cart = Cart.objects.select_for_update().get(user=user)
@@ -60,7 +59,17 @@ def create_order_from_cart(user, address, payment_method):
             raise CheckoutError(f'Only {product.stock} unit(s) of {product.name} are available.')
 
     subtotal = sum((locked_products[item.product_id].price * item.quantity for item in cart_items), Decimal('0.00'))
-    order_total = subtotal
+
+    discount_amount = Decimal('0.00')
+    applied_coupon = None
+    if coupon_code:
+        try:
+            applied_coupon = get_valid_coupon(coupon_code, cart_items, subtotal)
+            discount_amount = calculate_discount(applied_coupon, cart_items, subtotal)
+        except CouponError as exc:
+            raise CheckoutError(str(exc)) from exc
+
+    order_total = subtotal - discount_amount
 
     try:
         validate_payment_method(order_total, payment_method)
@@ -70,6 +79,8 @@ def create_order_from_cart(user, address, payment_method):
     order = Order.objects.create(
         user=user,
         subtotal=subtotal,
+        discount_amount=discount_amount,
+        coupon_code=applied_coupon.code if applied_coupon else '',
         payment_method=payment_method,
         recipient_name=address.recipient_name,
         phone=address.phone,
@@ -96,8 +107,19 @@ def create_order_from_cart(user, address, payment_method):
         product.stock -= quantity
         product.save(update_fields=['stock', 'updated_at'])
 
+    if applied_coupon:
+        applied_coupon.times_used = models_F_increment(applied_coupon)
+
     cart.items.all().delete()
     return order
+
+
+def models_F_increment(coupon):
+    from django.db.models import F
+    coupon.times_used = F('times_used') + 1
+    coupon.save(update_fields=['times_used'])
+    coupon.refresh_from_db(fields=['times_used'])
+    return coupon.times_used
 
 
 @transaction.atomic

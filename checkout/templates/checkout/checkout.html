@@ -46,6 +46,11 @@
             </div>
 
             <div class="form-group">
+                <label for="couponField">Coupon code (optional)</label>
+                <input type="text" id="couponField" name="coupon_code" value="{{ request.POST.coupon_code|default_if_none:'' }}" class="form-input" placeholder="e.g. WELCOME10">
+            </div>
+
+            <div class="form-group">
                 <label>Payment method</label>
                 {% for value, label in available_methods %}
                 <label class="payment-option">

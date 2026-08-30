@@ -1,0 +1,21 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Coupons | Hi-Tech Management{% endblock %}
+{% block content %}
+<div class="management-page-heading"><div><p class="management-kicker">Marketing</p><h1>Coupons</h1><p>Create and manage discount codes for your storefront.</p></div><a href="{% url 'management:coupon_create' %}" class="management-primary">Add coupon</a></div>
+<section class="management-panel table-panel"><div class="table-scroll"><table><thead><tr><th>Code</th><th>Discount</th><th>Min. order</th><th>Valid until</th><th>Used</th><th>Status</th><th></th></tr></thead><tbody>
+{% for coupon in coupons %}<tr>
+<td><strong>{{ coupon.code }}</strong></td>
+<td>{{ coupon.discount_display }}</td>
+<td>&#8377;{{ coupon.minimum_order_value }}</td>
+<td>{{ coupon.valid_until|date:"d M Y, H:i" }}</td>
+<td>{{ coupon.times_used }}{% if coupon.usage_limit %} / {{ coupon.usage_limit }}{% else %} / &infin;{% endif %}</td>
+<td><span class="status {% if coupon.is_active %}status-completed{% else %}status-cancelled{% endif %}">{% if coupon.is_active %}Active{% else %}Inactive{% endif %}</span></td>
+<td>
+<a class="table-link" href="{% url 'management:coupon_edit' coupon.id %}">Edit</a>
+<form method="post" action="{% url 'management:coupon_toggle' coupon.id %}">{% csrf_token %}<button class="text-button" type="submit">{% if coupon.is_active %}Deactivate{% else %}Activate{% endif %}</button></form>
+<form method="post" action="{% url 'management:coupon_delete' coupon.id %}" data-confirm="Delete coupon {{ coupon.code }}?">{% csrf_token %}<button class="text-button" type="submit">Delete</button></form>
+</td>
+</tr>{% empty %}<tr><td colspan="7" class="panel-empty">No coupons yet.</td></tr>{% endfor %}
+</tbody></table></div></section>
+<script>document.querySelectorAll('[data-confirm]').forEach(function(form){form.addEventListener('submit',function(event){if(!confirm(form.dataset.confirm)){event.preventDefault();}});});</script>
+{% endblock %}

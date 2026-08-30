@@ -18,5 +18,10 @@ urlpatterns = [
     path('inventory/<int:product_id>/', views.inventory_update, name='inventory_update'),
     path('orders/', views.order_list, name='orders'),
     path('orders/<str:number>/', views.order_detail, name='order_detail'),
+    path('coupons/', views.coupon_list, name='coupons'),
+    path('coupons/new/', views.coupon_create, name='coupon_create'),
+    path('coupons/<int:coupon_id>/edit/', views.coupon_edit, name='coupon_edit'),
+    path('coupons/<int:coupon_id>/delete/', views.coupon_delete, name='coupon_delete'),
+    path('coupons/<int:coupon_id>/toggle/', views.coupon_toggle, name='coupon_toggle'),
     path('users/', views.user_list, name='users'),
 ]
