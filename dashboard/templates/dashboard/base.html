@@ -25,6 +25,7 @@
                 <a href="{% url 'management:inventory' %}" class="{% if 'inventory' in request.resolver_match.url_name %}is-active{% endif %}">Inventory</a>
                                 <a href="{% url 'management:coupons' %}" class="{% if 'coupon' in request.resolver_match.url_name %}is-active{% endif %}">Coupons</a>
                 <a href="{% url 'management:users' %}" class="{% if request.resolver_match.url_name == 'users' %}is-active{% endif %}">Customers</a>
+                <a href="{% url 'management:dealers' %}" class="{% if 'dealer' in request.resolver_match.url_name %}is-active{% endif %}">Dealer requests</a>
             </nav>
             <a href="{% url 'home' %}" class="visit-site">View storefront &rarr;</a>
         </aside>

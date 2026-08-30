@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
             field.required = isDealer;
             field.disabled = !isDealer;
         });
+        accountTypeInputs.forEach(function (input) {
+            var card = input.closest('.account-type-option');
+            if (card) card.classList.toggle('is-selected', input.checked);
+        });
     }
 
     function openModal() {
@@ -56,12 +60,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function setSuccess(form, message) {
+        var element = form.querySelector('.modal-success');
+        if (!element) return;
+        element.textContent = message || '';
+        element.hidden = !message;
+    }
+
     Object.keys(forms).forEach(function (kind) {
         forms[kind].addEventListener('submit', function (event) {
             event.preventDefault();
             var form = forms[kind];
             var button = form.querySelector('button[type=submit]');
             setErrors(form, {});
+            setSuccess(form, '');
             button.disabled = true;
             button.textContent = kind === 'login' ? 'Signing in...' : 'Creating account...';
 
@@ -81,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(function (result) {
                     if (result.ok && result.data.success) {
                         if (result.data.pending_approval) {
-                            setErrors(form, { '__all__': [result.data.message] });
+                            setSuccess(form, result.data.message);
                             form.reset();
                             updateDealerFields();
                         } else {

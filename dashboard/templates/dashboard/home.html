@@ -2,6 +2,7 @@
 {% block title %}Overview | Hi-Tech Management{% endblock %}
 {% block content %}
 <div class="management-page-heading"><div><p class="management-kicker">Store overview</p><h1>Good to see you</h1><p>Key activity across your Hi-Tech storefront.</p></div><a href="{% url 'management:product_create' %}" class="management-primary">Add product</a></div>
+{% if pending_dealer_count %}<div class="management-alert info"><strong>{{ pending_dealer_count }} dealer application{{ pending_dealer_count|pluralize }} awaiting review.</strong> <a href="{% url 'management:dealers' %}">Review now &rarr;</a></div>{% endif %}
 <section class="stat-grid">
     <article class="stat-card"><span>Products</span><strong>{{ product_count }}</strong><a href="{% url 'management:products' %}">Manage catalogue</a></article>
     <article class="stat-card"><span>Customers</span><strong>{{ user_count }}</strong><a href="{% url 'management:users' %}">View customers</a></article>

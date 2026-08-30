@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
+from accounts.models import DealerProfile
 
 from coupons.models import Coupon
 
@@ -69,6 +70,7 @@ def dashboard_home(request):
         'low_stock': Product.objects.filter(is_active=True, stock__lte=5).order_by('stock', 'name')[:6],
         'recent_orders': Order.objects.select_related('user').prefetch_related('items').all()[:6],
         'recent_users': User.objects.select_related('profile').order_by('-date_joined')[:6],
+        'pending_dealer_count': DealerProfile.objects.filter(verification_status=DealerProfile.VerificationStatus.PENDING).count(),
     }
     return render(request, 'dashboard/home.html', context)
 
@@ -263,3 +265,41 @@ def coupon_toggle(request, coupon_id):
     coupon.save(update_fields=['is_active'])
     messages.success(request, f'Coupon {coupon.code} is now {"active" if coupon.is_active else "inactive"}.')
     return redirect('management:coupons')
+
+@staff_required
+def dealer_list(request):
+    query = request.GET.get('q', '').strip()
+    selected_status = request.GET.get('status', '').strip()
+    dealers = DealerProfile.objects.select_related('user', 'user__profile')
+    if query:
+        dealers = dealers.filter(
+            Q(company_name__icontains=query)
+            | Q(user__email__icontains=query)
+            | Q(gstin_or_tax_id__icontains=query)
+        )
+    if selected_status in DealerProfile.VerificationStatus.values:
+        dealers = dealers.filter(verification_status=selected_status)
+    return render(request, 'dashboard/dealers.html', {
+        'dealers': dealers,
+        'query': query,
+        'selected_status': selected_status,
+        'statuses': DealerProfile.VerificationStatus.choices,
+    })
+
+
+@staff_required
+@require_POST
+def dealer_approve(request, dealer_id):
+    dealer = get_object_or_404(DealerProfile, pk=dealer_id)
+    dealer.approve()
+    messages.success(request, f'{dealer.company_name} was approved. They can now log in.')
+    return redirect('management:dealers')
+
+
+@staff_required
+@require_POST
+def dealer_reject(request, dealer_id):
+    dealer = get_object_or_404(DealerProfile, pk=dealer_id)
+    dealer.reject()
+    messages.success(request, f'{dealer.company_name} was rejected.')
+    return redirect('management:dealers')
