@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var dealerFields = document.getElementById('dealerFields');
     var accountTypeInputs = forms.signup.querySelectorAll('input[name="account_type"]');
 
+    // Only ever follow a same-origin relative path (e.g. "/cart/"). Rejects
+    // protocol-relative ("//evil.com") or absolute URLs to avoid open-redirects.
+    function isSafeNextPath(value) {
+        return !!value && value.charAt(0) === '/' && value.charAt(1) !== '/';
+    }
+
     function showTab(name) {
         tabs.forEach(function (tab) { tab.classList.toggle('is-active', tab.dataset.tab === name); });
         Object.keys(forms).forEach(function (key) { forms[key].hidden = key !== name; });
@@ -51,6 +57,16 @@ document.addEventListener('DOMContentLoaded', function () {
     tabs.forEach(function (tab) { tab.addEventListener('click', function () { showTab(tab.dataset.tab); }); });
     accountTypeInputs.forEach(function (input) { input.addEventListener('change', updateDealerFields); });
     updateDealerFields();
+
+    // If a login-required page (e.g. /cart/) redirected here with ?next=,
+    // carry that destination through the forms and open straight to Log In
+    // instead of leaving the visitor stranded on the homepage.
+    var redirectTarget = new URLSearchParams(window.location.search).get('next');
+    if (isSafeNextPath(redirectTarget)) {
+        document.querySelectorAll('input[name="next"]').forEach(function (input) { input.value = redirectTarget; });
+        showTab('login');
+        openModal();
+    }
 
     function setErrors(form, errors) {
         form.querySelectorAll('.field-error, .modal-error').forEach(function (element) { element.textContent = ''; });
@@ -97,7 +113,13 @@ document.addEventListener('DOMContentLoaded', function () {
                             form.reset();
                             updateDealerFields();
                         } else {
-                            window.location.reload();
+                            var destinationInput = form.querySelector('input[name="next"]');
+                            var destination = destinationInput ? destinationInput.value : '';
+                            if (isSafeNextPath(destination)) {
+                                window.location.href = destination;
+                            } else {
+                                window.location.reload();
+                            }
                         }
                     } else {
                         setErrors(form, result.data.errors || { '__all__': ['Please try again.'] });

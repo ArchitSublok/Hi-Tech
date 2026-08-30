@@ -10,6 +10,7 @@
         <div class="modal-body">
             <form id="loginForm" class="modal-form" novalidate>
                 {% csrf_token %}
+                <input type="hidden" name="next">
                 <h2 id="authModalTitle">Welcome back</h2>
                 <div class="form-group">
                     <label for="loginEmail">Email address</label>
@@ -27,6 +28,7 @@
 
             <form id="signupForm" class="modal-form" novalidate hidden>
                 {% csrf_token %}
+                <input type="hidden" name="next">
                 <h2>Create your account</h2>
                 <fieldset class="form-group account-type-options">
                     <legend>Account type</legend>
