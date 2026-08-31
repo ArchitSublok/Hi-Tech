@@ -16,6 +16,11 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    dealer_price = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True,
+        validators=[MinValueValidator(Decimal('0.00'))],
+        help_text='Shown only to approved dealers. Leave blank to charge dealers the regular price.',
+    )
     image = models.ImageField(upload_to='products/', blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='products')
     stock = models.PositiveIntegerField(default=0)
@@ -29,6 +34,18 @@ class Product(models.Model):
     @property
     def is_available(self):
         return self.is_active and self.stock > 0
+
+    def price_for(self, user):
+        """Return the price this specific viewer should see."""
+        if (
+            user.is_authenticated
+            and hasattr(user, 'profile')
+            and user.profile.is_dealer
+            and user.profile.is_approved
+            and self.dealer_price is not None
+        ):
+            return self.dealer_price
+        return self.price
 
     @property
     def sold_quantity(self):

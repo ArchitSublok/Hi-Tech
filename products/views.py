@@ -1,10 +1,28 @@
+from django.db.models import Case, DecimalField, F, When
+from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator
 from .models import Product, Category
 
 
+def _is_approved_dealer(user):
+    return (
+        user.is_authenticated
+        and hasattr(user, 'profile')
+        and user.profile.is_dealer
+        and user.profile.is_approved
+    )
+
+
 def products(request):
     queryset = Product.objects.select_related('category').filter(is_active=True)
+
+    if _is_approved_dealer(request.user):
+        queryset = queryset.annotate(
+            effective_price=Coalesce('dealer_price', 'price', output_field=DecimalField())
+        )
+    else:
+        queryset = queryset.annotate(effective_price=F('price'))
 
     query = request.GET.get('q')
     if query:
@@ -16,17 +34,17 @@ def products(request):
 
     price_range = request.GET.get('price_range')
     if price_range == 'under_1000':
-        queryset = queryset.filter(price__lt=1000)
+        queryset = queryset.filter(effective_price__lt=1000)
     elif price_range == '1000_5000':
-        queryset = queryset.filter(price__gte=1000, price__lte=5000)
+        queryset = queryset.filter(effective_price__gte=1000, effective_price__lte=5000)
     elif price_range == 'over_5000':
-        queryset = queryset.filter(price__gt=5000)
+        queryset = queryset.filter(effective_price__gt=5000)
 
     sort = request.GET.get('sort')
     if sort == 'price_asc':
-        queryset = queryset.order_by('price')
+        queryset = queryset.order_by('effective_price')
     elif sort == 'price_desc':
-        queryset = queryset.order_by('-price')
+        queryset = queryset.order_by('-effective_price')
     else:
         queryset = queryset.order_by('-created_at')
 
