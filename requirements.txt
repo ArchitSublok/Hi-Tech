@@ -7,3 +7,4 @@ bcrypt
 Pillow
 whitenoise
 razorpay
+django-cloudinary-storage
