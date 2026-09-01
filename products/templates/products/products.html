@@ -16,6 +16,7 @@
             <input type="text" name="q" value="{{ search_query }}" placeholder="Search products by name..." aria-label="Search products">
             <button type="submit" class="btn btn-primary">Search</button>
             {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+            {% if selected_brand %}<input type="hidden" name="brand" value="{{ selected_brand }}">{% endif %}
             {% if selected_sort %}<input type="hidden" name="sort" value="{{ selected_sort }}">{% endif %}
             {% if selected_price_range %}<input type="hidden" name="price_range" value="{{ selected_price_range }}">{% endif %}
         </form>
@@ -33,9 +34,9 @@
             <div class="collection-header-actions">
                 <button type="button" class="filter-toggle-btn" id="filterToggle" aria-expanded="false" aria-controls="collectionFilters">Filters</button>
                 <select class="sort-select" onchange="location.href=this.value">
-                    <option value="?sort=newest{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if not selected_sort %}selected{% endif %}>Newest</option>
-                    <option value="?sort=price_asc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                    <option value="?sort=price_desc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                    <option value="?sort=newest{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if not selected_sort %}selected{% endif %}>Newest</option>
+                    <option value="?sort=price_asc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="?sort=price_desc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
                 </select>
             </div>
         </div>
@@ -55,33 +56,26 @@
 
                 <div class="filter-group">
                     <h3 class="filter-title">Price</h3>
-                    <form method="get" action="{% url 'products' %}" class="filter-form">
-                        {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
-                        {% if selected_sort %}<input type="hidden" name="sort" value="{{ selected_sort }}">{% endif %}
-                        {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
-
-                        <label class="filter-option">
-                            <input type="radio" name="price_range" value="" onchange="this.form.submit()" {% if not selected_price_range %}checked{% endif %}>
-                            Any price
-                        </label>
-                        <label class="filter-option">
-                            <input type="radio" name="price_range" value="under_1000" onchange="this.form.submit()" {% if selected_price_range == 'under_1000' %}checked{% endif %}>
-                            Under ₹1,000
-                        </label>
-                        <label class="filter-option">
-                            <input type="radio" name="price_range" value="1000_5000" onchange="this.form.submit()" {% if selected_price_range == '1000_5000' %}checked{% endif %}>
-                            ₹1,000 – ₹5,000
-                        </label>
-                        <label class="filter-option">
-                            <input type="radio" name="price_range" value="over_5000" onchange="this.form.submit()" {% if selected_price_range == 'over_5000' %}checked{% endif %}>
-                            Over ₹5,000
-                        </label>
-                    </form>
+                    <ul class="filter-list">
+                        <li><a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_brand %}brand={{ selected_brand }}&{% endif %}{% if selected_sort %}sort={{ selected_sort }}{% endif %}" class="filter-option-link {% if not selected_price_range %}active{% endif %}">Any price</a></li>
+                        {% for range in price_ranges %}
+                        <li><a href="?price_range={{ range.id }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}" class="filter-option-link {% if selected_price_range == range.id|stringformat:'s' %}active{% endif %}">{{ range.label }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
 
                 <div class="filter-group">
                     <h3 class="filter-title">Brand</h3>
-                    <p class="filter-placeholder">Coming soon</p>
+                    {% if brands %}
+                    <ul class="filter-list">
+                        <li><a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_price_range %}price_range={{ selected_price_range }}&{% endif %}{% if selected_sort %}sort={{ selected_sort }}{% endif %}" class="filter-option-link {% if not selected_brand %}active{% endif %}">All</a></li>
+                        {% for brand in brands %}
+                        <li><a href="?brand={{ brand.id }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_price_range %}&price_range={{ selected_price_range }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}" class="filter-option-link {% if selected_brand == brand.id|stringformat:'s' %}active{% endif %}">{{ brand.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="filter-placeholder">No brands added yet.</p>
+                    {% endif %}
                 </div>
 
                 <div class="filter-group">

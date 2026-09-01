@@ -10,6 +10,8 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
+from products.models import Brand, Category, PriceRange, Product
+from .forms import BrandForm, CategoryForm, CouponForm, InventoryForm, OrderStatusForm, PriceRangeForm, ProductForm, StaffLoginForm
 
 from accounts.models import DealerProfile
 
@@ -303,3 +305,61 @@ def dealer_reject(request, dealer_id):
     dealer.reject()
     messages.success(request, f'{dealer.company_name} was rejected.')
     return redirect('management:dealers')
+
+
+@staff_required
+def brand_list(request):
+    form = BrandForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        brand = form.save()
+        messages.success(request, f'{brand.name} was added.')
+        return redirect('management:brands')
+    brands = Brand.objects.annotate(product_count=Count('products')).order_by('name')
+    return render(request, 'dashboard/brands.html', {'form': form, 'brands': brands})
+
+
+@staff_required
+@require_POST
+def brand_delete(request, brand_id):
+    brand = get_object_or_404(Brand, pk=brand_id)
+    name = brand.name
+    brand.delete()
+    messages.success(request, f'{name} was deleted.')
+    return redirect('management:brands')
+
+
+@staff_required
+def price_range_list(request):
+    ranges = PriceRange.objects.all()
+    return render(request, 'dashboard/price_ranges.html', {'ranges': ranges})
+
+
+@staff_required
+def price_range_create(request):
+    form = PriceRangeForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        price_range = form.save()
+        messages.success(request, f'{price_range.label} was added.')
+        return redirect('management:price_ranges')
+    return render(request, 'dashboard/price_range_form.html', {'form': form, 'page_title': 'Add price range', 'submit_label': 'Add price range'})
+
+
+@staff_required
+def price_range_edit(request, range_id):
+    price_range = get_object_or_404(PriceRange, pk=range_id)
+    form = PriceRangeForm(request.POST or None, instance=price_range)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, f'{price_range.label} was updated.')
+        return redirect('management:price_ranges')
+    return render(request, 'dashboard/price_range_form.html', {'form': form, 'price_range': price_range, 'page_title': 'Edit price range', 'submit_label': 'Save changes'})
+
+
+@staff_required
+@require_POST
+def price_range_delete(request, range_id):
+    price_range = get_object_or_404(PriceRange, pk=range_id)
+    label = price_range.label
+    price_range.delete()
+    messages.success(request, f'{label} was deleted.')
+    return redirect('management:price_ranges')

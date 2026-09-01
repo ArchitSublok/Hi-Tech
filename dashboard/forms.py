@@ -34,7 +34,7 @@ class StaffLoginForm(forms.Form):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'dealer_price', 'image', 'category', 'stock', 'is_active']
+        fields = ['name', 'description', 'price', 'dealer_price', 'image', 'category', 'brand', 'stock', 'is_active']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 5}),
             'price': forms.NumberInput(attrs={'min': '0', 'step': '0.01'}),

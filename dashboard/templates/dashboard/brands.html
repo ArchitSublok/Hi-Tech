@@ -1,0 +1,8 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Brands | Hi-Tech Management{% endblock %}
+{% block content %}
+<div class="management-page-heading"><div><p class="management-kicker">Catalogue</p><h1>Brands</h1><p>Manage which brands customers can filter by.</p></div></div>
+<section class="management-two-column"><div class="management-panel form-panel"><h2>Add brand</h2><form method="post" class="management-form">{% csrf_token %}<label for="{{ form.name.id_for_label }}">Brand name</label>{{ form.name }}{{ form.name.errors }}<button class="management-primary" type="submit">Add brand</button></form></div>
+<div class="management-panel"><h2>Existing brands</h2><div class="mini-list">{% for brand in brands %}<div><span><strong>{{ brand.name }}</strong><small>{{ brand.product_count }} product{{ brand.product_count|pluralize }}</small></span><form method="post" action="{% url 'management:brand_delete' brand.id %}" data-confirm="Delete {{ brand.name }}?">{% csrf_token %}<button class="text-button" type="submit">Delete</button></form></div>{% empty %}<p class="panel-empty">No brands yet.</p>{% endfor %}</div></div></section>
+<script>document.querySelectorAll('[data-confirm]').forEach(function(form){form.addEventListener('submit',function(event){if(!confirm(form.dataset.confirm)){event.preventDefault();}});});</script>
+{% endblock %}

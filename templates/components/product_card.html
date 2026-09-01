@@ -7,9 +7,9 @@
         {% endif %}
     </div>
     <div class="product-card-body">
-        <p class="product-card-category">{{ product.category.name }}</p>
+        <p class="product-card-category">{{ product.category.name }}{% if product.brand %} · {{ product.brand.name }}{% endif %}</p>
         <h3 class="product-card-title"><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
-        <p class="product-card-price">&#8377;₹{{ product|display_price:user }}</p>
+        <p class="product-card-price">&#8377;{{ product|display_price:user }}</p>
         <p class="product-stock {% if not product.is_available %}is-out{% endif %}">{% if product.is_available %}{{ product.stock }} in stock{% else %}Out of stock{% endif %}</p>
         {% if user.is_authenticated and product.is_available %}
             <form method="post" action="{% url 'cart:add' product.id %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button type="submit" class="btn btn-primary product-card-btn">Add to cart</button></form>
