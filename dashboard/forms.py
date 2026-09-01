@@ -2,9 +2,8 @@ from django import forms
 from django.contrib.auth import authenticate
 
 from coupons.models import Coupon
-
 from orders.models import Order
-from products.models import Category, Product
+from products.models import Brand, Category, PriceRange, Product
 
 
 class StaffLoginForm(forms.Form):
@@ -53,6 +52,23 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name']
+
+
+class BrandForm(forms.ModelForm):
+    class Meta:
+        model = Brand
+        fields = ['name']
+
+
+class PriceRangeForm(forms.ModelForm):
+    class Meta:
+        model = PriceRange
+        fields = ['label', 'min_value', 'max_value', 'display_order', 'is_active']
+        widgets = {
+            'min_value': forms.NumberInput(attrs={'min': '0', 'step': '0.01'}),
+            'max_value': forms.NumberInput(attrs={'min': '0', 'step': '0.01'}),
+            'display_order': forms.NumberInput(attrs={'min': '0'}),
+        }
 
 
 class InventoryForm(forms.ModelForm):
